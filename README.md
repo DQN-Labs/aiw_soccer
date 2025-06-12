@@ -12,7 +12,7 @@ Assistant Dev: DQN Labs
 
 Game started development: June 12, 2025\
 Estimated BETA release date: early July\
-Estimated final release date: TBD\
+Estimated final release date: TBD
 
 #### We are OPEN to PRs! Feel free to submit your ideas through PRs! We'll check it out and take further actions as deemed intended.
 
