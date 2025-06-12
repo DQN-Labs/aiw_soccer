@@ -10,3 +10,11 @@ The current crew: \
 Lead Dev: Din lokala programmerare \
 Assistant Dev: DQN Labs
 
+Game started development: June 12, 2025\
+Estimated BETA release date: early July\
+Estimated final release date: TBD\
+
+
+
+
+
