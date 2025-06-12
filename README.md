@@ -6,7 +6,7 @@ You play against albert and, in case you don't know what soccer is, you try to k
 
 Have fun!
 
-The current crew:
-Lead Dev: Din lokala programmerare
-Assitant Dev: DQN Labs
+The current crew: /n
+Lead Dev: Din lokala programmerare /n
+Assistant Dev: DQN Labs
 
