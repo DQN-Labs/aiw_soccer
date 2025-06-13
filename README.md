@@ -8,7 +8,9 @@ Have fun!
 
 The current crew: \
 Lead Dev: Din lokala programmerare \
-Assistant Dev: DQN Labs
+Assistant Dev: DQN Labs \
+3D Artist: Lyxn
+
 
 Game started development: June 12, 2025\
 Estimated BETA release date: early July\
