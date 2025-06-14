@@ -13,17 +13,19 @@ public class AlbertMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    void FixedUpdate()
+    {
+        float moveInput = Input.GetAxis("Vertical");
+        Vector3 move = transform.forward * moveInput * moveSpeed * Time.fixedDeltaTime;
+        rb.MovePosition(rb.position + move);
+
+        float rotationInput = Input.GetAxis("Horizontal");
+        Quaternion turn = Quaternion.Euler(0f, rotationInput * rotationSpeed * Time.fixedDeltaTime, 0f);
+        rb.MoveRotation(rb.rotation * turn);
+    }
+
     void Update()
     {
-        // moving forward and backward
-        float moveInput = Input.GetAxis("Vertical");
-        transform.Translate(Vector3.forward * moveInput * moveSpeed * Time.deltaTime);
-
-        // rotating side to side
-        float rotationInput = Input.GetAxis("Horizontal");
-        transform.Rotate(Vector3.up * rotationInput * rotationSpeed * Time.deltaTime);
-
-        // space to jump
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
