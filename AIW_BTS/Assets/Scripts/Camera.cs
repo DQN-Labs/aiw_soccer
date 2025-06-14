@@ -1,14 +1,27 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class LookAtTarget : MonoBehaviour
+public class CameraFollow : MonoBehaviour
 {
-    public Transform target;  
+    public Transform targetObject;
+    private Vector3 initialOffset;
+    private Vector3 cameraPosition;
+    private float followSpeed = 5f;
 
-    void Update()
+    void Start()
     {
-        if (target != null)
+        initialOffset = transform.position - targetObject.position;
+    }
+
+    void LateUpdate()
+    {
+        if (targetObject != null)
         {
-            transform.LookAt(target);
+
+            Vector3 desiredPosition = targetObject.position + initialOffset;
+            
+            transform.position = Vector3.Lerp(transform.position, desiredPosition, followSpeed * Time.deltaTime);
         }
     }
 }
