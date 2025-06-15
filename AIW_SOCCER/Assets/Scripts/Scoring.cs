@@ -3,30 +3,29 @@ using UnityEngine.UI;
 
 public class Scoring : MonoBehaviour
 {
-    public int score1 = 0; //this declares 1st score and it can be used in any script
-    public int score2 = 0; // same goes here
-    public Text scoreText1; // text to show the score
-    public Text scoreText2; //another one
+    public int score1 = 0; 
+    public int score2 = 0; 
+    public Text scoreText1; 
+    public Text scoreText2; 
     void Start()
     {
         scoreText1.text = "Team 1: " + score1;
         scoreText2.text = "Team 2: " + score2;
     }
-    void OnCollisionEnter(Collision collision)
+    
+    public void AddScoreToTeam(int teamNumber)
     {
-        if (collision.collider.CompareTag("Goal1")) // this checks if collision
+        if (teamNumber == 1) 
         {
-            Debug.Log("ball scored on 1st team");// this prints a message when the ball touches
-            score2++;// increase score using teh operator ++
-            scoreText2.text = "Team 2: " + score2; //updates the score Text
+            score1++;
+            scoreText1.text = "Team 1: " + score1; 
         }
-        else if (collision.collider.CompareTag("Goal2")) // also checks if collision
+        else if (teamNumber == 2)
         {
-            Debug.Log("ball scored on 2nd team"); // also prints a message
-            score1++;// increase score
-            scoreText1.text = "Team 1: " + score1;//updates the score text
-        }
+            score2++;
+            scoreText1.text = "Team 2: " + score2;
     }
 
 
+} // I removed the yapping
 }

@@ -684,6 +684,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ball
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: eede64280108e1db3839460baade4e1c, type: 3}
+      propertyPath: m_TagString
+      value: Ball
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -945,6 +949,7 @@ GameObject:
   - component: {fileID: 497619388}
   - component: {fileID: 497619387}
   - component: {fileID: 497619386}
+  - component: {fileID: 497619390}
   m_Layer: 0
   m_Name: GoalRegister2
   m_TagString: Goal2
@@ -1041,6 +1046,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &497619390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 497619385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ddf67826c495d4db302665afe19452, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teamToScore: 2
+  scoringSystem: {fileID: 1470508552}
 --- !u!1 &546268589
 GameObject:
   m_ObjectHideFlags: 0
@@ -2323,6 +2342,7 @@ GameObject:
   - component: {fileID: 1604222283}
   - component: {fileID: 1604222282}
   - component: {fileID: 1604222281}
+  - component: {fileID: 1604222285}
   m_Layer: 0
   m_Name: GoalRegister1
   m_TagString: Goal1
@@ -2419,6 +2439,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1604222285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1604222280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ddf67826c495d4db302665afe19452, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teamToScore: 1
+  scoringSystem: {fileID: 1470508552}
 --- !u!1 &1644661549
 GameObject:
   m_ObjectHideFlags: 0
