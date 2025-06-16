@@ -1603,6 +1603,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AlbertChar
       objectReference: {fileID: 0}
+    - target: {fileID: 8442510506162454399, guid: 2e021c01756a84d8ea96c9e8520966fe, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -6478536213147159724, guid: 2e021c01756a84d8ea96c9e8520966fe, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: -8700617353114198275, guid: 2e021c01756a84d8ea96c9e8520966fe, type: 3}
@@ -1719,10 +1723,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -804731622281664130, guid: 9326ca3e95e5e61d19a0aa78f0bab353, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -6629797300637803691, guid: 9326ca3e95e5e61d19a0aa78f0bab353, type: 3}
     - target: {fileID: 919132149155446097, guid: 9326ca3e95e5e61d19a0aa78f0bab353, type: 3}
       propertyPath: m_Name
       value: Kai
       objectReference: {fileID: 0}
+    - target: {fileID: 7071182760956848314, guid: 9326ca3e95e5e61d19a0aa78f0bab353, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -6478536213147159724, guid: 2e021c01756a84d8ea96c9e8520966fe, type: 3}
+    - target: {fileID: 7202271454713460447, guid: 9326ca3e95e5e61d19a0aa78f0bab353, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -6478536213147159724, guid: 2e021c01756a84d8ea96c9e8520966fe, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
