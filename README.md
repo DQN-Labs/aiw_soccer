@@ -7,9 +7,9 @@ You play against albert and, in case you don't know what soccer is, you try to k
 Have fun!
 
 The current crew: \
-Lead Dev: Din lokala programmerare \
-Assistant Dev: DQN Labs \
-3D Artist: Lyxn
+Lead Dev: Din lokala programmerare 🇸🇪\
+Lead AI guy: DQN Labs 🇮🇳\
+Lead 3d but also a little bit of coding guy: Lyxn 🇪🇬
 
 
 Game started development: June 12, 2025\
