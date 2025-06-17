@@ -19,6 +19,16 @@ public class BallReset : MonoBehaviour
                 rb.linearVelocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
             }
+             PlayerReset player = GameObject.FindWithTag("Player").GetComponent<PlayerReset>();
+            if (player != null)
+            {
+                player.ResetPosition();
+            }
+            KaiReset kai = GameObject.FindWithTag("Kai").GetComponent<KaiReset>();
+            if (kai != null)
+            {
+                kai.KResetPosition();
+            }
         }
         if (collision.collider.CompareTag("Goal2"))
         {
@@ -31,6 +41,16 @@ public class BallReset : MonoBehaviour
             {
                 rb.linearVelocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
+            }
+             PlayerReset player = GameObject.FindWithTag("Player").GetComponent<PlayerReset>();
+            if (player != null)
+            {
+                player.ResetPosition();
+            }
+            KaiReset kai = GameObject.FindWithTag("Kai").GetComponent<KaiReset>();
+            if (kai != null)
+            {
+                kai.KResetPosition();
             }
         }
     }

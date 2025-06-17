@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Goal1
   - Goal2
+<<<<<<< Updated upstream
+=======
+  - Ball
+  - Kai
+>>>>>>> Stashed changes
   layers:
   - Default
   - TransparentFX
