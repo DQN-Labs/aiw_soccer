@@ -1,9 +1,8 @@
 using UnityEngine;
 
-public class PlayerReset : MonoBehaviour
+public class Player : MonoBehaviour
 {
     
-
     public void ResetPosition()
     {
         transform.position = new Vector3(5, 6, 0);
