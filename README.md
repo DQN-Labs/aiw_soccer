@@ -9,7 +9,8 @@ Have fun!
 The current crew: \
 Lead Dev: Din lokala programmerare 🇸🇪\
 Lead AI guy: DQN Labs 🇮🇳\
-Lead 3d but also a little bit of coding guy: Lyxn 🇪🇬
+Lead 3d but also a little bit of coding guy: Lyxn 🇪🇬\
+Public Contributor: Apache\
 
 
 Game started development: June 12, 2025\
