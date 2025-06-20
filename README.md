@@ -7,9 +7,9 @@ You play against albert and, in case you don't know what soccer is, you try to k
 Have fun!
 
 The current crew: \
-Lead Dev: Din lokala programmerare 🇸🇪\
-Lead AI guy: DQN Labs 🇮🇳\
-Lead 3d but also a little bit of coding guy: Lyxn 🇪🇬\
+Lead Dev & Manager: Din lokala programmerare 🇸🇪\
+Lead AI Dev: DQN Labs 🇮🇳\
+Assistant AI & Lead 3D Dev: Lyxn 🇪🇬\
 Public Contributor: Apache
 
 
