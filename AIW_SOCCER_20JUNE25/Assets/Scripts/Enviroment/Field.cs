@@ -3,9 +3,8 @@ using UnityEngine;
 public class Field : MonoBehaviour
 {
 
-    [SerializeField] private Player player;
-    [SerializeField] private Kai kai;
     [SerializeField] private Ball ball;
+    [SerializeField] private GameObject[] cubes;
 
     private void Start()
     {
@@ -33,15 +32,35 @@ public class Field : MonoBehaviour
 
         }
 
-        // TODO: All this should come from the same Interface or base class
-        if (player != null)
+        foreach (GameObject cube in cubes)
         {
-            player.ResetPosition();
-        }
+            if (cube != null)
+            {
+                var cubeEntity = cube.GetComponent<ICubeEntity>();
+                if (cubeEntity != null)
+                {
+                    // Reinicia la posición usando la interfaz
+                    cubeEntity.ResetPosition(cubeEntity.GetInitialPosition());
 
-        if (kai != null)
-        {
-            kai.ResetPosition();
+                    // Detiene cualquier movimiento
+                    Rigidbody rb = cube.GetComponent<Rigidbody>();
+                    if (rb != null)
+                    {
+                        rb.linearVelocity = Vector3.zero;
+                        rb.angularVelocity = Vector3.zero;
+                    }
+                }
+            }
         }
+    }
+
+    public GameObject[] GetCubes()
+    {
+        return cubes;
+    }
+
+    public void SetCubes(GameObject[] newCubes)
+    {
+        cubes = newCubes;
     }
 }
