@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Kai : MonoBehaviour
 {
-    
     public void ResetPosition()
     {
         transform.position = new Vector3(-5, 5, 0);
