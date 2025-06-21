@@ -12,6 +12,9 @@
 /[Uu]ser[Ss]ettings/
 *.log
 
+# General settings:
+/ProjectSettings/
+/Layouts/
 # We are not using this folder for the project right now (We are using AIW_SOCCER_20JUNE25, so we can ignore the original)
 # Changes this when merging to main
 /AIW_SOCCER/
