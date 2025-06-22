@@ -15,9 +15,6 @@
 # General settings:
 /ProjectSettings/
 /Layouts/
-# We are not using this folder for the project right now (We are using AIW_SOCCER_20JUNE25, so we can ignore the original)
-# Changes this when merging to main
-/AIW_SOCCER/
 
 # By default unity supports Blender asset imports, *.blend1 blender files do not need to be commited to version control.
 *.blend1
