@@ -4,26 +4,10 @@
 TagManager:
   serializedVersion: 3
   tags:
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-  - Goal1
-  - Goal2
-=======
   - Goal2
   - Goal1
   - Ball
->>>>>>> Stashed changes
-=======
-  - Goal2
-  - Goal1
-  - Ball
->>>>>>> Stashed changes
-=======
-  - Goal2
-  - Goal1
-  - Ball
->>>>>>> Stashed changes
+  - Barrier
   layers:
   - Default
   - TransparentFX
@@ -63,10 +47,3 @@ TagManager:
     locked: 0
   m_RenderingLayers:
   - Default
-  - Light Layer 1
-  - Light Layer 2
-  - Light Layer 3
-  - Light Layer 4
-  - Light Layer 5
-  - Light Layer 6
-  - Light Layer 7
