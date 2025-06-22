@@ -313,7 +313,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'alpha version 0.0.1
+  m_text: 'alpha version 0.1
 
     gameplay test executable
 
