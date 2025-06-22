@@ -6,8 +6,14 @@ TagManager:
   tags:
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   - Goal1
   - Goal2
+=======
+  - Goal2
+  - Goal1
+  - Ball
+>>>>>>> Stashed changes
 =======
   - Goal2
   - Goal1
