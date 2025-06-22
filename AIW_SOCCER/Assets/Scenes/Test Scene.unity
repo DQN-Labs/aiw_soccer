@@ -1324,8 +1324,13 @@ GameObject:
   - component: {fileID: 683128723}
   m_Layer: 0
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   m_Name: Cube (4)
   m_TagString: Untagged
+=======
+  m_Name: Ball
+  m_TagString: Ball
+>>>>>>> Stashed changes
 =======
   m_Name: Ball
   m_TagString: Ball
