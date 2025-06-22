@@ -30,7 +30,7 @@ public class Kick : MonoBehaviour
 
             Vector3 kickDirection = Quaternion.AngleAxis(kickAngleDegrees, transform.right) * forward;
             Vector3 kickVelocity = kickDirection * kickMagnitude;
-            rb.velocity = kickVelocity;
+            rb.linearVelocity = kickVelocity;
         }
     }
   }

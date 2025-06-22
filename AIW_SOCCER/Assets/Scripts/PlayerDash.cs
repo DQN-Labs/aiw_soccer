@@ -41,7 +41,7 @@ public class PlayerDash : MonoBehaviour
     {
       if(isDashing)
       {
-        rb.velocity = dashDirection * dashForce;
+        rb.linearVelocity = dashDirection * dashForce;
 
         dashTimeLeft -= Time.fixedDeltaTime;
         if (dashTimeLeft <= 0f)
