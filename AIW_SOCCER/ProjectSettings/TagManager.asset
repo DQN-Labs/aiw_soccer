@@ -7,7 +7,6 @@ TagManager:
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
   - Goal1
   - Goal2
 =======
@@ -24,11 +23,6 @@ TagManager:
   - Goal2
   - Goal1
   - Ball
->>>>>>> Stashed changes
-=======
-  - Goal2
-  - Goal1
-  - Barrier
 >>>>>>> Stashed changes
   layers:
   - Default
