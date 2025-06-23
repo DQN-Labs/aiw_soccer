@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Goal2
+  - Goal1
+  - Ball
+  - Barrier
   layers:
   - Default
   - TransparentFX

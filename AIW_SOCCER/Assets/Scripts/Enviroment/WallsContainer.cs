@@ -46,7 +46,7 @@ public class WallsContainer : MonoBehaviour
         if (frontWall != null)
         {
             frontWall.transform.localPosition = new Vector3(depth / 2f, height / 2f, 0);
-            frontWall.transform.localScale = new Vector3(width, height, thickness);
+            frontWall.transform.localScale = new Vector3(thickness, height, width);
         }
 
         // Right Wall (X+)
