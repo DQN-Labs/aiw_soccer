@@ -18,6 +18,10 @@ MonoBehaviour:
     y: 43
     width: 1920
     height: 1109
+    x: 0
+    y: 43.2
+    width: 1536
+    height: 780.8
   m_ShowMode: 4
   m_Title: Game
   m_RootView: {fileID: 2}
