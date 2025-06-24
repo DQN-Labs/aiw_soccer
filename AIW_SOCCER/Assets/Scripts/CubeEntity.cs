@@ -17,6 +17,9 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
     [SerializeField] private float kickAngleDegrees = 65f;
     [SerializeField] private float kickMagnitude = 30f;
 
+    [Tooltip("Choose which keys this agent should respond to when using Heuristic mode.")]
+    [SerializeField] private ControlScheme controlScheme = ControlScheme.WASD_Arrows;
+
     private Vector3 initialPosition;
     private Rigidbody rigidBody;
 
@@ -75,11 +78,22 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
         return rigidBody;
     }
 
+    public ControlScheme GetControlScheme()
+    {
+        return controlScheme;
+    }
+
+    public void SetControlScheme(ControlScheme newControlScheme)
+    {
+        controlScheme = newControlScheme;
+    }
+
     // Kick functionality
 
     private void HandleKickInput()
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        KeyCode kickKey = controlScheme == ControlScheme.WASD_Arrows ? KeyCode.F : KeyCode.H;
+        if (Input.GetKeyDown(kickKey))
         {
             BKick();
         }
@@ -110,7 +124,8 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
     // Dash functionality
     private void HandleDashInput()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash) StartDash();
+        KeyCode dashKey = controlScheme == ControlScheme.WASD_Arrows ? KeyCode.LeftShift : KeyCode.B;
+        if (Input.GetKeyDown(dashKey) && canDash) StartDash();
     }
 
     private void HandleCooldown()

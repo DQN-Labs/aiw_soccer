@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7510710737168129603, guid: 93b7f36c4f8889643b5e1a32433ea75d, type: 3}
       propertyPath: dashForce
-      value: 20
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7510710737168129603, guid: 93b7f36c4f8889643b5e1a32433ea75d, type: 3}
       propertyPath: dashCooldown
@@ -70,7 +70,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7510710737168129603, guid: 93b7f36c4f8889643b5e1a32433ea75d, type: 3}
       propertyPath: kickMagnitude
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7510710737168129603, guid: 93b7f36c4f8889643b5e1a32433ea75d, type: 3}
       propertyPath: kickAngleDegrees
@@ -154,12 +154,11 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
-  moveSpeed: 15
-  rotationSpeed: 200
-  jumpForce: 5
-  controlScheme: 0
+  moveSpeed: 9
+  rotationSpeed: 360
+  jumpForce: 3
   ball: {fileID: 0}
-  goal: {fileID: 0}
+  netTarget: {fileID: 0}
   spawnPosition: {fileID: 0}
 --- !u!114 &6842121705226535815
 MonoBehaviour:
@@ -262,7 +261,8 @@ PrefabInstance:
       value: CubeBase
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 65702495048144492, guid: 2e021c01756a84d8ea96c9e8520966fe, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e021c01756a84d8ea96c9e8520966fe, type: 3}

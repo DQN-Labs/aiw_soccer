@@ -5,10 +5,33 @@ public class ScoreScreen : MonoBehaviour
 {
     [SerializeField] private Canvas scoreCanvas; // Prefab for displaying score text
 
+    [Header("Configurations")]
+    [SerializeField] private bool isSingleScoreScreen = false; // If true, only one score will be displayed
+
+    [SerializeField] private Net net;
+
     private int[] scoreAmount = new int[2]; // 0 for Player, 1 for Kai
+
+    private void OnValidate()
+    {
+        if (isSingleScoreScreen && net)
+        {
+            SetCanvasScore(new int[] { 0, 0 });
+        }
+        else
+        {
+            SetCanvasScore(new int[] { 0, 0 }); // Default to AlbertNet for initial display
+        }
+    }
 
     private void Start()
     {
+        if (isSingleScoreScreen && net == null)
+        {
+            Debug.LogWarning("Single Score Screen mode selected, but no net assigned");
+            return;
+        }
+
         Net.OnGoalScored += HandleGoalScored;
     }
 
@@ -38,7 +61,11 @@ public class ScoreScreen : MonoBehaviour
         }
 
         // Format and set the score text
-        scoreText.text = $"{newScoreAmount[0]} - {newScoreAmount[1]}";
+        if (!isSingleScoreScreen) scoreText.text = $"{newScoreAmount[0]} - {newScoreAmount[1]}";
+        else {
+            scoreText.text = net.GetNetID() == NetID.AlbertNet ? $"{newScoreAmount[1]}" : $"{newScoreAmount[0]}";
+        }
+
     }
 
     // Getter for scoreAmount
