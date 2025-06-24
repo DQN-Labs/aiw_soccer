@@ -7,18 +7,19 @@ public class Player : MonoBehaviour, ICubeEntity
     [SerializeField] private float rotationSpeed = 200;
     [SerializeField] private float jumpForce = 5;
 
-    [Tooltip("Choose which keys this agent should respond to when using Heuristic mode.")]
-    [SerializeField] private ControlScheme controlScheme = ControlScheme.WASD_Arrows;
-
     private Vector3 initialPosition;
     private Rigidbody rigidBody;
     private bool isGrounded;
+
+    private ControlScheme controlScheme; // Default control scheme
 
     private void Awake()
     {
         // Store the initial position of the cube
         initialPosition = transform.position;
         rigidBody = GetComponent<Rigidbody>();
+
+        controlScheme = GetComponent<CubeEntity>().GetControlScheme(); // Get the control scheme from CubeEntity
     }
 
     // Movement

@@ -12,16 +12,13 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
     [SerializeField] private float rotationSpeed;
     [SerializeField] private float jumpForce;
 
-    [Tooltip("Choose which keys this agent should respond to when using Heuristic mode.")]
-    [SerializeField] private ControlScheme controlScheme = ControlScheme.WASD_Arrows;
-
-
     [Header("References")]
     [SerializeField] private Ball ball;
     [SerializeField] private Net netTarget;
     [SerializeField] private Transform spawnPosition; // This is not necessary
 
     private GoalRegister goalRegisterTarget;
+    private ControlScheme controlScheme;
 
     private Vector3 initialPosition;
     private Rigidbody rigidBody;
@@ -33,6 +30,7 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         goalRegisterTarget = netTarget.GetComponentInChildren<GoalRegister>();
 
         Net.OnGoalScored += HandleGoalScored;
+        controlScheme = GetComponent<CubeEntity>().GetControlScheme(); // Default control scheme
     }
 
     public override void OnEpisodeBegin()
@@ -48,8 +46,7 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
 
         transform.localRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
 
-        ball.transform.localPosition = new Vector3(0, 5, 0);
-        ball.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        ball.ResetPosition(); // Reset the ball position
     }
 
     public override void CollectObservations(VectorSensor sensor)
