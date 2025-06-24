@@ -2,6 +2,7 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using UnityEngine.Assertions.Must;
 
 
 public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
@@ -126,6 +127,8 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
     {
         if (e.netID == netTarget.GetNetID()) AddReward(10.0f); // Add reward if the goal was scored in the agent's target net
         else AddReward(-10.0f); // Add penalty if the goal was scored in the agent's net
+
+        Debug.Log($"Goal scored: Reward for {gameObject.name}: {GetCumulativeReward()}");
         EndEpisode();
     }
 
@@ -209,19 +212,5 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
     public GameObject GetGameObject()
     {
         return gameObject;
-    }
-
-    public void OnGoalScored()
-    {
-
-        AddReward(-1.0f);
-        EndEpisode();
-    }
-
-    public void OnGoalMade()
-    {
-
-        AddReward(1.0f);
-        EndEpisode();
     }
 }
