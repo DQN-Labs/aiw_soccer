@@ -4,7 +4,7 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 
 
-public class SoccerAgent : Unity.MLAgents.Agent, ICubeEntity
+public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
 {
     [Header("Movement Attributes")]
     [SerializeField] private float moveSpeed;
@@ -16,19 +16,22 @@ public class SoccerAgent : Unity.MLAgents.Agent, ICubeEntity
 
 
     [Header("References")]
-    public Transform ball;
-    public Transform goal;
+    [SerializeField] private Ball ball;
+    [SerializeField] private Net netTarget;
+    [SerializeField] private Transform spawnPosition; // This is not necessary
 
-    public Transform spawnPosition;
+    private GoalRegister goalRegisterTarget;
 
     private Vector3 initialPosition;
     private Rigidbody rigidBody;
     private bool isGrounded;
-
     public override void Initialize()
     {
         rigidBody = GetComponent<Rigidbody>();
-        
+        initialPosition = transform.localPosition;
+        goalRegisterTarget = netTarget.GetComponentInChildren<GoalRegister>();
+
+        Net.OnGoalScored += HandleGoalScored;
     }
 
     public override void OnEpisodeBegin()
@@ -36,7 +39,12 @@ public class SoccerAgent : Unity.MLAgents.Agent, ICubeEntity
         rigidBody.linearVelocity = Vector3.zero;
         rigidBody.angularVelocity = Vector3.zero;
 
-        transform.position = spawnPosition.position;
+        // Add randomness to the spawn position within a range
+        //transform.localPosition = new Vector3(Random.Range(-4f, 4f), 0.5f, Random.Range(-4f, 4f));
+
+        if (spawnPosition != null) transform.localPosition = spawnPosition.localPosition; // Use the spawn position if available
+        else transform.localPosition = initialPosition; // Use the initial position
+
         transform.localRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
 
         ball.transform.localPosition = new Vector3(0, 5, 0);
@@ -54,8 +62,8 @@ public class SoccerAgent : Unity.MLAgents.Agent, ICubeEntity
         // sensor.AddObservation(isGrounded ? 1f : 0f);
         
         sensor.AddObservation(rigidBody.linearVelocity);                      // 3
-        sensor.AddObservation((ball.localPosition - transform.localPosition).normalized); // 3
-        sensor.AddObservation((goal.localPosition - transform.localPosition).normalized); // 3
+        sensor.AddObservation((ball.transform.localPosition - transform.localPosition).normalized); // 3
+        sensor.AddObservation((goalRegisterTarget.transform.localPosition - transform.localPosition).normalized); // 3
         sensor.AddObservation(isGrounded ? 1f : 0f);                          // 1
 
     }
@@ -96,11 +104,13 @@ public class SoccerAgent : Unity.MLAgents.Agent, ICubeEntity
         if (distanceToBall < 1.5f)
             AddReward(0.005f);
 
-        if (Vector3.Distance(ball.transform.localPosition, goal.transform.localPosition) < 1.5f)
-        {
-            AddReward(1000.0f);
-            EndEpisode();
-        }
+        // Changed this; Now this only happens if the event is fired
+        //if (Vector3.Distance(ball.transform.localPosition, goalRegisterTarget.transform.localPosition) < 1.5f)
+        //{
+        //    AddReward(1000.0f);
+        //    Debug.Log("Goal Scored!");
+        //    EndEpisode();
+        //}
 
         if (transform.localPosition.y < -1f)
         {
@@ -109,6 +119,13 @@ public class SoccerAgent : Unity.MLAgents.Agent, ICubeEntity
         }
 
         AddReward(-0.0001f);
+    }
+
+    private void HandleGoalScored(object Sender, Net.OnGoalScoredEventArgs e)
+    {
+        if (e.netID == netTarget.GetNetID()) AddReward(10.0f); // Add reward if the goal was scored in the agent's target net
+        else AddReward(-10.0f); // Add penalty if the goal was scored in the agent's net
+        EndEpisode();
     }
 
 

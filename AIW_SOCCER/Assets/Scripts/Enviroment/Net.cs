@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 // Move NetID outside the class and make it public
-public enum NetID { PlayerNet, KaiNet }
+public enum NetID { AlbertNet, KaiNet }
 
 public class Net : MonoBehaviour
 {
@@ -35,5 +35,10 @@ public class Net : MonoBehaviour
         {
             netID = netID
         });
+    }
+
+    public NetID GetNetID()
+    {
+        return netID;
     }
 }

@@ -7,85 +7,53 @@ public enum ControlScheme
 
 public class CubeEntity : MonoBehaviour, ICubeEntity
 {
-    [Header("Movement Attributes")]
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float rotationSpeed;
-    [SerializeField] private float jumpForce;
+    [Header("Dash properties")]
+    [SerializeField] private float dashForce = 10f;
+    [SerializeField] private float dashDuration = 0.2f;
+    [SerializeField] private float dashCooldown = 1f;
 
-    [Tooltip("Choose which keys this agent should respond to when using Heuristic mode.")]
-    [SerializeField] private ControlScheme controlScheme = ControlScheme.WASD_Arrows;
+    [Header("Kick properties")]
+    [SerializeField] private float kickRange = 3f;
+    [SerializeField] private float kickAngleDegrees = 65f;
+    [SerializeField] private float kickMagnitude = 30f;
 
     private Vector3 initialPosition;
     private Rigidbody rigidBody;
-    private bool isGrounded;
+
+    // Dash-related variables
+    private bool isDashing;
+    private bool canDash = true;
+    private float dashTimeLeft;
+    private float cooldownTimer;
+    private Vector3 dashDirection;
 
     private void Awake()
     {
-        // Store the initial position of the cube
         initialPosition = transform.position;
         rigidBody = GetComponent<Rigidbody>();
     }
 
-    // Movement
-
     void FixedUpdate()
     {
-        float moveInput = 0f;
-        float rotationInput = 0f;
-
-        // Adapt input based on control scheme
-        if (controlScheme == ControlScheme.WASD_Arrows)
+        if (isDashing)
         {
-            moveInput = Input.GetAxis("Vertical");
-            rotationInput = Input.GetAxis("Horizontal");
+            rigidBody.linearVelocity = dashDirection * dashForce;
+            dashTimeLeft -= Time.fixedDeltaTime;
+            if (dashTimeLeft <= 0f)
+            {
+                StopDash();
+            }
         }
-        else if (controlScheme == ControlScheme.IJKL_Shift)
-        {
-            // I = forward, K = backward, J = left, L = right
-            if (Input.GetKey(KeyCode.I)) moveInput += 1f;
-            if (Input.GetKey(KeyCode.K)) moveInput -= 1f;
-            if (Input.GetKey(KeyCode.L)) rotationInput += 1f;
-            if (Input.GetKey(KeyCode.J)) rotationInput -= 1f;
-        }
-
-        Vector3 move = transform.forward * moveInput * moveSpeed * Time.fixedDeltaTime;
-        rigidBody.MovePosition(rigidBody.position + move);
-
-        Quaternion turn = Quaternion.Euler(0f, rotationInput * rotationSpeed * Time.fixedDeltaTime, 0f);
-        rigidBody.MoveRotation(rigidBody.rotation * turn);
     }
 
     void Update()
     {
-        bool jumpPressed = false;
-
-        // Adapt jump input based on control scheme
-        if (controlScheme == ControlScheme.WASD_Arrows)
-        {
-            jumpPressed = Input.GetKeyDown(KeyCode.Space);
-        }
-        else if (controlScheme == ControlScheme.IJKL_Shift)
-        {
-            jumpPressed = Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift);
-        }
-
-        if (jumpPressed && isGrounded)
-        {
-            rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            isGrounded = false;
-        }
+        HandleDashInput();
+        HandleCooldown();
+        HandleKickInput();
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        // Check if touching the ground to enable jumping again
-        if (collision.contacts[0].normal.y > 0.5f)
-        {
-            isGrounded = true;
-        }
-    }
-
-    // Methods
+    // Métodos de la interfaz ICubeEntity
 
     public Vector3 GetInitialPosition()
     {
@@ -96,37 +64,81 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
     {
         return gameObject;
     }
+
     public void ResetPosition(Vector3 initialPosition)
     {
         transform.position = initialPosition;
         transform.rotation = Quaternion.Euler(0, -90, 0);
     }
-
-    public ControlScheme GetControlScheme()
-    {
-        return controlScheme;
-    }
-    
-    public void SetControlScheme(ControlScheme newScheme)
-    {
-        controlScheme = newScheme;
-    }
-
-    public float[] GetMovementAttributes()
-    {
-        return new float[] { moveSpeed, rotationSpeed, jumpForce };
-    }
-
-    // Allow partial updates by using nullable parameters
-    public void SetMovementAttributes(float? moveSpeed = null, float? rotationSpeed = null, float? jumpForce = null)
-    {
-        if (moveSpeed.HasValue) this.moveSpeed = moveSpeed.Value;
-        if (rotationSpeed.HasValue) this.rotationSpeed = rotationSpeed.Value;
-        if (jumpForce.HasValue) this.jumpForce = jumpForce.Value;
-    }
-
     public Rigidbody GetRigidbody()
     {
         return rigidBody;
+    }
+
+    // Kick functionality
+
+    private void HandleKickInput()
+    {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            BKick();
+        }
+    }
+
+    private void BKick()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position + transform.forward * 1.5f, kickRange);
+
+        foreach (Collider hit in hits)
+        {
+            if (hit.CompareTag("Ball"))
+            {
+                Rigidbody rb = hit.attachedRigidbody;
+                if (rb == null) return;
+
+                Vector3 forward = transform.forward;
+                forward.y = 0f;
+                forward.Normalize();
+
+                Vector3 kickDirection = Quaternion.AngleAxis(kickAngleDegrees, transform.right) * forward;
+                Vector3 kickVelocity = kickDirection * kickMagnitude;
+                rb.linearVelocity = kickVelocity;
+            }
+        }
+    }
+
+    // Dash functionality
+    private void HandleDashInput()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash) StartDash();
+    }
+
+    private void HandleCooldown()
+    {
+        if (!canDash)
+        {
+            cooldownTimer -= Time.deltaTime;
+            if (cooldownTimer <= 0f) canDash = true;
+        }
+    }
+
+    private void StartDash()
+    {
+        isDashing = true;
+        canDash = false;
+        dashTimeLeft = dashDuration;
+        cooldownTimer = dashCooldown;
+
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        dashDirection = (transform.forward * vertical + transform.right * horizontal).normalized;
+
+        if (dashDirection == Vector3.zero) dashDirection = transform.forward;
+    }
+
+    private void StopDash()
+    {
+        isDashing = false;
+        rigidBody.linearVelocity = Vector3.zero;
     }
 }

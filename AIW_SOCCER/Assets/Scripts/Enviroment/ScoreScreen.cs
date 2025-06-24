@@ -15,9 +15,9 @@ public class ScoreScreen : MonoBehaviour
     private void HandleGoalScored(object sender, Net.OnGoalScoredEventArgs e)
     {
         // Add the received scoreIncrease to the current scoreAmount
-        scoreAmount[0] += e.netID == NetID.PlayerNet ? 1 : 0;
+        scoreAmount[0] += e.netID == NetID.AlbertNet ? 1 : 0;
         scoreAmount[1] += e.netID == NetID.KaiNet ? 1 : 0;
-        Debug.Log($"Goal Scored! Player: {scoreAmount[1]}, Kai: {scoreAmount[0]}");
+        Debug.Log($"Goal Scored! Albert's Team: {scoreAmount[1]}, Kai's Team: {scoreAmount[0]}");
         SetCanvasScore(scoreAmount);
     }
 

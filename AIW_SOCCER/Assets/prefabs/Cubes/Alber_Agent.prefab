@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 182207936114688673, guid: 57d65e34e7f3d4f4185e15733636ac10, type: 3}
+      propertyPath: controlScheme
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1573893637228402241, guid: 57d65e34e7f3d4f4185e15733636ac10, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -52,9 +56,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Alber_Agent
       objectReference: {fileID: 0}
+    - target: {fileID: 9128733335229566796, guid: 57d65e34e7f3d4f4185e15733636ac10, type: 3}
+      propertyPath: m_SensorName
+      value: AlbertRayPerceptionSensor
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 8124517237362709435, guid: 57d65e34e7f3d4f4185e15733636ac10, type: 3}
+    - {fileID: 5300067490894429184, guid: 57d65e34e7f3d4f4185e15733636ac10, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1573893637228402241, guid: 57d65e34e7f3d4f4185e15733636ac10, type: 3}
       insertIndex: -1
