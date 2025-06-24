@@ -1692,6 +1692,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2094982806}
     m_Modifications:
+    - target: {fileID: 487321268755138629, guid: 596e56f1290fc3543aab5b7df359c9c6, type: 3}
+      propertyPath: ownerAgent
+      value: 
+      objectReference: {fileID: 150403427}
+    - target: {fileID: 487321268755138629, guid: 596e56f1290fc3543aab5b7df359c9c6, type: 3}
+      propertyPath: opponentAgent
+      value: 
+      objectReference: {fileID: 1253423465}
+    - target: {fileID: 1748594739122520679, guid: 596e56f1290fc3543aab5b7df359c9c6, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 6.62932
+      objectReference: {fileID: 0}
+    - target: {fileID: 1748594739122520679, guid: 596e56f1290fc3543aab5b7df359c9c6, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3.8996
+      objectReference: {fileID: 0}
+    - target: {fileID: 1748594739122520679, guid: 596e56f1290fc3543aab5b7df359c9c6, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.19498001
+      objectReference: {fileID: 0}
+    - target: {fileID: 1748594739122520679, guid: 596e56f1290fc3543aab5b7df359c9c6, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3090488109838809433, guid: 596e56f1290fc3543aab5b7df359c9c6, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3669597985954938222, guid: 596e56f1290fc3543aab5b7df359c9c6, type: 3}
       propertyPath: m_Name
       value: NetBlue
@@ -2866,6 +2894,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2094982806}
     m_Modifications:
+    - target: {fileID: 783397671082204098, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 6.62932
+      objectReference: {fileID: 0}
+    - target: {fileID: 783397671082204098, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3.8996
+      objectReference: {fileID: 0}
+    - target: {fileID: 783397671082204098, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.19498001
+      objectReference: {fileID: 0}
+    - target: {fileID: 783397671082204098, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1465958777774559712, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
+      propertyPath: ownerAgent
+      value: 
+      objectReference: {fileID: 1253423465}
+    - target: {fileID: 1465958777774559712, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
+      propertyPath: opponentAgent
+      value: 
+      objectReference: {fileID: 150403427}
     - target: {fileID: 2339187126906643659, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
       propertyPath: m_Name
       value: NetOrange
@@ -2924,6 +2976,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3161511931409632767, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
       propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4069265247242313980, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

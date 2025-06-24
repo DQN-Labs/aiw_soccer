@@ -54,13 +54,13 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(transform.position); // 3
-        // sensor.AddObservation(rigidBody.linearVelocity);
-        // sensor.AddObservation(ball.position);
-        // sensor.AddObservation(goal.localPosition);
-        // sensor.AddObservation((ball.localPosition - transform.localPosition).normalized);
-        // sensor.AddObservation((goal.localPosition - transform.localPosition).normalized);
-        // sensor.AddObservation(isGrounded ? 1f : 0f);
-        
+                                                   // sensor.AddObservation(rigidBody.linearVelocity);
+                                                   // sensor.AddObservation(ball.position);
+                                                   // sensor.AddObservation(goal.localPosition);
+                                                   // sensor.AddObservation((ball.localPosition - transform.localPosition).normalized);
+                                                   // sensor.AddObservation((goal.localPosition - transform.localPosition).normalized);
+                                                   // sensor.AddObservation(isGrounded ? 1f : 0f);
+
         sensor.AddObservation(rigidBody.linearVelocity);                      // 3
         sensor.AddObservation((ball.transform.localPosition - transform.localPosition).normalized); // 3
         sensor.AddObservation((goalRegisterTarget.transform.localPosition - transform.localPosition).normalized); // 3
@@ -81,11 +81,11 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         else if (moveAction == 2)
             moveDir = -transform.forward;
 
-        
+
         Vector3 desiredVelocity = moveDir * moveSpeed;
         rigidBody.linearVelocity = new Vector3(desiredVelocity.x, rigidBody.linearVelocity.y, desiredVelocity.z);
 
-       
+
         if (rotateAction == 1)
             rigidBody.angularVelocity = new Vector3(0f, -rotationSpeed * Mathf.Deg2Rad, 0f); // convert to rad/s
         else if (rotateAction == 2)
@@ -93,16 +93,16 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         else
             rigidBody.angularVelocity = Vector3.zero;
 
-        
+
         if (jumpAction == 1 && isGrounded)
         {
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
         }
 
-        float distanceToBall = Vector3.Distance(transform.localPosition, ball.transform.localPosition);
-        if (distanceToBall < 1.5f)
-            AddReward(0.005f);
+        // float distanceToBall = Vector3.Distance(transform.localPosition, ball.transform.localPosition);
+        // if (distanceToBall < 1.5f)
+        //     AddReward(0.005f);
 
         // Changed this; Now this only happens if the event is fired
         //if (Vector3.Distance(ball.transform.localPosition, goalRegisterTarget.transform.localPosition) < 1.5f)
@@ -112,13 +112,14 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         //    EndEpisode();
         //}
 
-        if (transform.localPosition.y < -1f)
-        {
-            AddReward(-1.0f);
-            EndEpisode();
-        }
 
-        AddReward(-0.0001f);
+        // if (transform.localPosition.y < -1f)
+        // {
+        //     AddReward(-1.0f);
+        //     EndEpisode();
+        // }
+
+        AddReward(-0.0005f);
     }
 
     private void HandleGoalScored(object Sender, Net.OnGoalScoredEventArgs e)
@@ -163,10 +164,10 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         {
             isGrounded = true;
         }
-        if (collision.gameObject.CompareTag("Ball"))
-        {
-        AddReward(0.5f); // touching the ball is a good thing
-        }
+        // if (collision.gameObject.CompareTag("Ball"))
+        // {
+        // AddReward(0.5f); // touching the ball is a good thing
+        // }
         // if (collision.gameObject.CompareTag("Barrier"))
         // {
         //     AddReward(-0.1f);
@@ -208,5 +209,19 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
     public GameObject GetGameObject()
     {
         return gameObject;
+    }
+
+    public void OnGoalScored()
+    {
+
+        AddReward(-1.0f);
+        EndEpisode();
+    }
+
+    public void OnGoalMade()
+    {
+
+        AddReward(1.0f);
+        EndEpisode();
     }
 }
