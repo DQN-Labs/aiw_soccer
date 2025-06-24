@@ -413,6 +413,17 @@ MonoBehaviour:
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 0
   m_EndVerticalOffset: 0
+--- !u!114 &150403427 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9077759128658282069, guid: 0c695f2e2b38532499dded9e28191bb9, type: 3}
+  m_PrefabInstance: {fileID: 1553177409}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150403409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b493ae11ce00c48c0893171140f7ad6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &204467844
 GameObject:
   m_ObjectHideFlags: 0
@@ -1725,6 +1736,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2094982806}
     m_Modifications:
+    - target: {fileID: 487321268755138629, guid: 596e56f1290fc3543aab5b7df359c9c6, type: 3}
+      propertyPath: ownerAgent
+      value: 
+      objectReference: {fileID: 150403427}
+    - target: {fileID: 487321268755138629, guid: 596e56f1290fc3543aab5b7df359c9c6, type: 3}
+      propertyPath: opponentAgent
+      value: 
+      objectReference: {fileID: 1253423465}
+    - target: {fileID: 1748594739122520679, guid: 596e56f1290fc3543aab5b7df359c9c6, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 6.62932
+      objectReference: {fileID: 0}
+    - target: {fileID: 1748594739122520679, guid: 596e56f1290fc3543aab5b7df359c9c6, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3.8996
+      objectReference: {fileID: 0}
+    - target: {fileID: 1748594739122520679, guid: 596e56f1290fc3543aab5b7df359c9c6, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.19498001
+      objectReference: {fileID: 0}
+    - target: {fileID: 1748594739122520679, guid: 596e56f1290fc3543aab5b7df359c9c6, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3090488109838809433, guid: 596e56f1290fc3543aab5b7df359c9c6, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3669597985954938222, guid: 596e56f1290fc3543aab5b7df359c9c6, type: 3}
       propertyPath: m_Name
       value: NetBlue
@@ -2733,6 +2772,17 @@ MonoBehaviour:
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 0
   m_EndVerticalOffset: 0
+--- !u!114 &1253423465 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3767873073583959711, guid: 9900ab91d78f8cf45944ff7a5b1dc65c, type: 3}
+  m_PrefabInstance: {fileID: 581839920}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253423447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b493ae11ce00c48c0893171140f7ad6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1357464749 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3161511931409632767, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
@@ -2962,6 +3012,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2094982806}
     m_Modifications:
+    - target: {fileID: 783397671082204098, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 6.62932
+      objectReference: {fileID: 0}
+    - target: {fileID: 783397671082204098, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3.8996
+      objectReference: {fileID: 0}
+    - target: {fileID: 783397671082204098, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.19498001
+      objectReference: {fileID: 0}
+    - target: {fileID: 783397671082204098, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1465958777774559712, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
+      propertyPath: ownerAgent
+      value: 
+      objectReference: {fileID: 1253423465}
+    - target: {fileID: 1465958777774559712, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
+      propertyPath: opponentAgent
+      value: 
+      objectReference: {fileID: 150403427}
     - target: {fileID: 2339187126906643659, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
       propertyPath: m_Name
       value: NetOrange
@@ -3020,6 +3094,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3161511931409632767, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
       propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4069265247242313980, guid: 9039aa4bba4d7e84d85dcfe190fb887d, type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
