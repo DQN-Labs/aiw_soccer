@@ -437,7 +437,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -982,7 +982,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -2258,6 +2258,50 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 653949296660317270, guid: 47988ec4191539143bc7024e398d92cc, type: 3}
+      propertyPath: m_text
+      value: 0-0
+      objectReference: {fileID: 0}
+    - target: {fileID: 653949296660317270, guid: 47988ec4191539143bc7024e398d92cc, type: 3}
+      propertyPath: m_fontSize
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 653949296660317270, guid: 47988ec4191539143bc7024e398d92cc, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8ef66fb4a94e88646a27c16be2eae562, type: 2}
+    - target: {fileID: 653949296660317270, guid: 47988ec4191539143bc7024e398d92cc, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 653949296660317270, guid: 47988ec4191539143bc7024e398d92cc, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 5544414135228154546, guid: 8ef66fb4a94e88646a27c16be2eae562, type: 2}
+    - target: {fileID: 653949296660317270, guid: 47988ec4191539143bc7024e398d92cc, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 939778015424809326, guid: 47988ec4191539143bc7024e398d92cc, type: 3}
+      propertyPath: m_fontSize
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 939778015424809326, guid: 47988ec4191539143bc7024e398d92cc, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8ef66fb4a94e88646a27c16be2eae562, type: 2}
+    - target: {fileID: 939778015424809326, guid: 47988ec4191539143bc7024e398d92cc, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 939778015424809326, guid: 47988ec4191539143bc7024e398d92cc, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 5544414135228154546, guid: 8ef66fb4a94e88646a27c16be2eae562, type: 2}
+    - target: {fileID: 939778015424809326, guid: 47988ec4191539143bc7024e398d92cc, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2292145966474079889, guid: 47988ec4191539143bc7024e398d92cc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
@@ -2736,7 +2780,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -3006,7 +3050,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9077759128658282069, guid: 0c695f2e2b38532499dded9e28191bb9, type: 3}
       propertyPath: controlScheme
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3102,7 +3146,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
