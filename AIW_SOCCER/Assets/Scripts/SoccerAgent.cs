@@ -19,6 +19,8 @@ public class SoccerAgent : Unity.MLAgents.Agent, ICubeEntity
     public Transform ball;
     public Transform goal;
 
+    public Transform spawnPosition;
+
     private Vector3 initialPosition;
     private Rigidbody rigidBody;
     private bool isGrounded;
@@ -26,6 +28,7 @@ public class SoccerAgent : Unity.MLAgents.Agent, ICubeEntity
     public override void Initialize()
     {
         rigidBody = GetComponent<Rigidbody>();
+        
     }
 
     public override void OnEpisodeBegin()
@@ -33,25 +36,31 @@ public class SoccerAgent : Unity.MLAgents.Agent, ICubeEntity
         rigidBody.linearVelocity = Vector3.zero;
         rigidBody.angularVelocity = Vector3.zero;
 
-        transform.localPosition = new Vector3(Random.Range(-4f, 4f), 0.5f, Random.Range(-4f, 4f));
+        transform.position = spawnPosition.position;
         transform.localRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
 
-        ball.transform.localPosition = new Vector3(Random.Range(-3f, 3f), 0.5f, Random.Range(-3f, 3f));
+        ball.transform.localPosition = new Vector3(0, 5, 0);
         ball.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
     }
-    
+
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(transform.localPosition);
-        sensor.AddObservation(rigidBody.linearVelocity);
-        sensor.AddObservation(ball.position);
-        sensor.AddObservation(goal.localPosition);
-        sensor.AddObservation((ball.localPosition - transform.localPosition).normalized);
-        sensor.AddObservation((goal.localPosition - transform.localPosition).normalized);
-        sensor.AddObservation(isGrounded ? 1f : 0f);
+        sensor.AddObservation(transform.position); // 3
+        // sensor.AddObservation(rigidBody.linearVelocity);
+        // sensor.AddObservation(ball.position);
+        // sensor.AddObservation(goal.localPosition);
+        // sensor.AddObservation((ball.localPosition - transform.localPosition).normalized);
+        // sensor.AddObservation((goal.localPosition - transform.localPosition).normalized);
+        // sensor.AddObservation(isGrounded ? 1f : 0f);
+        
+        sensor.AddObservation(rigidBody.linearVelocity);                      // 3
+        sensor.AddObservation((ball.localPosition - transform.localPosition).normalized); // 3
+        sensor.AddObservation((goal.localPosition - transform.localPosition).normalized); // 3
+        sensor.AddObservation(isGrounded ? 1f : 0f);                          // 1
+
     }
 
-public override void OnActionReceived(ActionBuffers actions)
+    public override void OnActionReceived(ActionBuffers actions)
     {
         int moveAction = actions.DiscreteActions[0];   // 0 = none, 1 = forward, 2 = backward
         int rotateAction = actions.DiscreteActions[1]; // 0 = none, 1 = left, 2 = right
@@ -64,11 +73,11 @@ public override void OnActionReceived(ActionBuffers actions)
         else if (moveAction == 2)
             moveDir = -transform.forward;
 
-        // 👇 Force-based snappy movement using velocity override
+        
         Vector3 desiredVelocity = moveDir * moveSpeed;
         rigidBody.linearVelocity = new Vector3(desiredVelocity.x, rigidBody.linearVelocity.y, desiredVelocity.z);
 
-        // 👇 Snappy rotation by applying angular velocity
+       
         if (rotateAction == 1)
             rigidBody.angularVelocity = new Vector3(0f, -rotationSpeed * Mathf.Deg2Rad, 0f); // convert to rad/s
         else if (rotateAction == 2)
@@ -76,7 +85,7 @@ public override void OnActionReceived(ActionBuffers actions)
         else
             rigidBody.angularVelocity = Vector3.zero;
 
-        // 👇 Jump stays as impulse-based for that instant "boing"
+        
         if (jumpAction == 1 && isGrounded)
         {
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -85,11 +94,11 @@ public override void OnActionReceived(ActionBuffers actions)
 
         float distanceToBall = Vector3.Distance(transform.localPosition, ball.transform.localPosition);
         if (distanceToBall < 1.5f)
-            AddReward(0.05f);
+            AddReward(0.005f);
 
         if (Vector3.Distance(ball.transform.localPosition, goal.transform.localPosition) < 1.5f)
         {
-            AddReward(1.0f);
+            AddReward(1000.0f);
             EndEpisode();
         }
 
@@ -98,6 +107,8 @@ public override void OnActionReceived(ActionBuffers actions)
             AddReward(-1.0f);
             EndEpisode();
         }
+
+        AddReward(-0.0001f);
     }
 
 
@@ -135,15 +146,19 @@ public override void OnActionReceived(ActionBuffers actions)
         {
             isGrounded = true;
         }
-        if (collision.gameObject.CompareTag("Barrier"))
+        if (collision.gameObject.CompareTag("Ball"))
         {
-            AddReward(-0.1f);
+        AddReward(0.5f); // touching the ball is a good thing
         }
+        // if (collision.gameObject.CompareTag("Barrier"))
+        // {
+        //     AddReward(-0.1f);
+        // }
     }
 
     public void ResetPosition(Vector3 initialPosition)
     {
-        transform.localPosition = initialPosition;
+        transform.localPosition = spawnPosition.position;
     }
 
     public float[] GetMovementAttributes()
