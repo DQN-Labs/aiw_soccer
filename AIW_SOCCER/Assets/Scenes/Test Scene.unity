@@ -1332,6 +1332,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1191797164320973749, guid: 9900ab91d78f8cf45944ff7a5b1dc65c, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: c750e158abe97f24190c8a6608b99fd8, type: 2}
     - target: {fileID: 1860842369926670612, guid: 9900ab91d78f8cf45944ff7a5b1dc65c, type: 3}
       propertyPath: m_Name
       value: Alber_Agent
@@ -2996,6 +3000,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kai_Agent
       objectReference: {fileID: 0}
+    - target: {fileID: 6429623461230726015, guid: 0c695f2e2b38532499dded9e28191bb9, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: c750e158abe97f24190c8a6608b99fd8, type: 2}
     - target: {fileID: 7686077894310498997, guid: 0c695f2e2b38532499dded9e28191bb9, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.004641
