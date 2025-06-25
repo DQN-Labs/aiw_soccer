@@ -25,6 +25,8 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
     private Rigidbody rigidBody;
     private bool isGrounded;
 
+    private CubeEntity cubeEntity;
+
     private int iterationCount = 0; // Counter for the number of iterations
 
     public static event EventHandler<OnEpisodeEndEventArgs> OnEpisodeEnd; // Event to notify when the episode ends
@@ -37,6 +39,7 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
     public override void Initialize()
     {
         rigidBody = GetComponent<Rigidbody>();
+        cubeEntity = GetComponent<CubeEntity>();
         initialPosition = transform.localPosition;
         goalRegisterTarget = netTarget.GetComponentInChildren<GoalRegister>();
 
@@ -58,7 +61,7 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
 
         transform.localRotation = Quaternion.Euler(0, UnityEngine.Random.Range(0f, 360f), 0);
 
-        ball.ResetPosition(); // Reset the ball position
+        ball.ResetPosition(); // Reset the ball position back to the starting position
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -83,6 +86,7 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         int moveAction = actions.DiscreteActions[0];   // 0 = none, 1 = forward, 2 = backward
         int rotateAction = actions.DiscreteActions[1]; // 0 = none, 1 = left, 2 = right
         int jumpAction = actions.DiscreteActions[2];   // 0 = no jump, 1 = jump
+        int dashKickAction = actions.DiscreteActions[3];   // 0 = none, 1 = kick, dash will be added later
 
         Vector3 moveDir = Vector3.zero;
 
@@ -108,6 +112,10 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         {
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
+        }
+        if (dashKickAction == 1)
+        {
+            cubeEntity.BKick();
         }
 
         // float distanceToBall = Vector3.Distance(transform.localPosition, ball.transform.localPosition);
@@ -170,7 +178,10 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
                                      Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) ? 2 : 0;
 
                 discreteActions[2] = Input.GetKey(KeyCode.Space) ? 1 : 0;
+                discreteActions[3] = Input.GetKey(KeyCode.F) ? 1 : 0;
                 break;
+
+            
 
             case ControlScheme.IJKL_Shift:
                 discreteActions[0] = Input.GetKey(KeyCode.I) ? 1 :
@@ -180,6 +191,7 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
                                      Input.GetKey(KeyCode.L) ? 2 : 0;
 
                 discreteActions[2] = Input.GetKey(KeyCode.RightShift) ? 1 : 0;
+                discreteActions[3] = Input.GetKey(KeyCode.H) ? 1 : 0;
                 break;
         }
     }
