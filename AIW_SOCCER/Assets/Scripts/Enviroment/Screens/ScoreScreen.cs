@@ -1,9 +1,8 @@
 using UnityEngine;
 using TMPro;
 
-public class ScoreScreen : MonoBehaviour
+public class ScoreScreen : Screen
 {
-    [SerializeField] private Canvas scoreCanvas; // Prefab for displaying score text
 
     [Header("Configurations")]
     [SerializeField] private bool isSingleScoreScreen = false; // If true, only one score will be displayed
@@ -16,11 +15,11 @@ public class ScoreScreen : MonoBehaviour
     {
         if (isSingleScoreScreen && net)
         {
-            SetCanvasScore(new int[] { 0, 0 });
+            SetCanvasText(new int[] { 0, 0 });
         }
         else
         {
-            SetCanvasScore(new int[] { 0, 0 }); // Default to AlbertNet for initial display
+            SetCanvasText(new int[] { 0, 0 }); // Default to AlbertNet for initial display
         }
     }
 
@@ -41,19 +40,19 @@ public class ScoreScreen : MonoBehaviour
         scoreAmount[0] += e.netID == NetID.AlbertNet ? 1 : 0;
         scoreAmount[1] += e.netID == NetID.KaiNet ? 1 : 0;
         Debug.Log($"Goal Scored! Albert's Team: {scoreAmount[1]}, Kai's Team: {scoreAmount[0]}");
-        SetCanvasScore(scoreAmount);
+        SetCanvasText(scoreAmount);
     }
 
-    private void SetCanvasScore(int[] newScoreAmount)
+    private void SetCanvasText(int[] newScoreAmount)
     {
-        if (scoreCanvas == null)
+        if (canvas == null)
         {
             Debug.LogWarning("Score canvas is not assigned.");
             return;
         }
 
         // Find the TextMeshProUGUI component in the canvas
-        var scoreText = scoreCanvas.GetComponentInChildren<TextMeshProUGUI>();
+        var scoreText = canvas.GetComponentInChildren<TextMeshProUGUI>();
         if (scoreText == null)
         {
             Debug.LogWarning("No TextMeshProUGUI component found in scoreCanvas.");
