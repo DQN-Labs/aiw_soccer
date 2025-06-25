@@ -205,7 +205,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2070653722957305932, guid: e11e76eb26958d44aa85973baec1218a, type: 3}
       propertyPath: timeLimit
-      value: 8
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 3115814675982268383, guid: e11e76eb26958d44aa85973baec1218a, type: 3}
       propertyPath: m_LocalScale.x
@@ -315,6 +315,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1577610069136231109, guid: b1c47a3d9c16b5f4380eb3db948e6e2b, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1577610069136231109, guid: b1c47a3d9c16b5f4380eb3db948e6e2b, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 7dca90947c6794249b1895d680602094, type: 2}
     - target: {fileID: 2990712419488565564, guid: b1c47a3d9c16b5f4380eb3db948e6e2b, type: 3}
       propertyPath: m_Name
       value: Ball
@@ -829,14 +837,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4082528713421739127, guid: 0c695f2e2b38532499dded9e28191bb9, type: 3}
-      propertyPath: m_CastShadows
-      value: 1
+    - target: {fileID: 2893901959636804541, guid: 0c695f2e2b38532499dded9e28191bb9, type: 3}
+      propertyPath: dashForce
+      value: 20
       objectReference: {fileID: 0}
-    - target: {fileID: 4082528713421739127, guid: 0c695f2e2b38532499dded9e28191bb9, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 9f204b689ad32c1489b34bca3e1b0767, type: 2}
     - target: {fileID: 5792626423143203294, guid: 0c695f2e2b38532499dded9e28191bb9, type: 3}
       propertyPath: m_Name
       value: Kai_Agent
@@ -1142,6 +1146,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 22.5
       objectReference: {fileID: 0}
+    - target: {fileID: 135674528379580781, guid: 7276388c2fe99e046b0b5781e98c29fe, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5a745c16d864129428bdcfb60fc49251, type: 2}
     - target: {fileID: 2099597442045766089, guid: 7276388c2fe99e046b0b5781e98c29fe, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
