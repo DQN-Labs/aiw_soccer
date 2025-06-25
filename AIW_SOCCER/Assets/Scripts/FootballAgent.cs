@@ -3,6 +3,7 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine.Assertions.Must;
+using System;
 
 
 public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
@@ -23,6 +24,16 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
     private Vector3 initialPosition;
     private Rigidbody rigidBody;
     private bool isGrounded;
+
+    private int iterationCount = 0; // Counter for the number of iterations
+
+    public static event EventHandler<OnEpisodeEndEventArgs> OnEpisodeEnd; // Event to notify when the episode ends
+
+    public class OnEpisodeEndEventArgs : EventArgs
+    {
+        public int iterationCount = 0;
+    }
+
     public override void Initialize()
     {
         rigidBody = GetComponent<Rigidbody>();
@@ -30,6 +41,7 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         goalRegisterTarget = netTarget.GetComponentInChildren<GoalRegister>();
 
         Net.OnGoalScored += HandleGoalScored;
+        TimeScreen.OnTimeLimitReached += HandleTimeLimitReached; // End episode when time expires
         controlScheme = GetComponent<CubeEntity>().GetControlScheme(); // Default control scheme
     }
 
@@ -44,7 +56,7 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         if (spawnPosition != null) transform.localPosition = spawnPosition.localPosition; // Use the spawn position if available
         else transform.localPosition = initialPosition; // Use the initial position
 
-        transform.localRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
+        transform.localRotation = Quaternion.Euler(0, UnityEngine.Random.Range(0f, 360f), 0);
 
         ball.ResetPosition(); // Reset the ball position
     }
@@ -126,9 +138,23 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         else AddReward(-10.0f); // Add penalty if the goal was scored in the agent's net
 
         Debug.Log($"Goal scored: Reward for {gameObject.name}: {GetCumulativeReward()}");
+        iterationCount++;
+        OnEpisodeEnd?.Invoke(this, new OnEpisodeEndEventArgs {
+            iterationCount = iterationCount
+        }); // Notify subscribers that the episode has ended
         EndEpisode();
     }
 
+    private void HandleTimeLimitReached(object sender, EventArgs e)
+    {
+        Debug.Log($"Time limit reached for {gameObject.name}. Ending episode.");
+        AddReward(-1.0f); // Penalty for time limit reached
+        iterationCount++;
+
+        // The episode end event is triggered by the TimeScreen, so we don't need to call it here
+
+        EndEpisode();
+    }
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
