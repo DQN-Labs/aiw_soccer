@@ -23,6 +23,8 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
     private Vector3 initialPosition;
     private Rigidbody rigidBody;
 
+    
+
     // Dash-related variables
     private bool isDashing;
     private bool canDash = true;
@@ -34,6 +36,7 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
     {
         initialPosition = transform.position;
         rigidBody = GetComponent<Rigidbody>();
+        
     }
 
     void FixedUpdate()
@@ -56,7 +59,7 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
         HandleKickInput();
     }
 
-    // Métodos de la interfaz ICubeEntity
+    // Mï¿½todos de la interfaz ICubeEntity
 
     public Vector3 GetInitialPosition()
     {
@@ -99,7 +102,7 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
         }
     }
 
-    private void BKick()
+    public void BKick()
     {
         Collider[] hits = Physics.OverlapSphere(transform.position + transform.forward * 1.5f, kickRange);
 
