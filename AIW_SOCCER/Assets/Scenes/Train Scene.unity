@@ -1146,6 +1146,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 22.5
       objectReference: {fileID: 0}
+    - target: {fileID: 135674528379580781, guid: 7276388c2fe99e046b0b5781e98c29fe, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5a745c16d864129428bdcfb60fc49251, type: 2}
     - target: {fileID: 2099597442045766089, guid: 7276388c2fe99e046b0b5781e98c29fe, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -1494,7 +1498,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 1
+  m_RenderPostProcessing: 0
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
