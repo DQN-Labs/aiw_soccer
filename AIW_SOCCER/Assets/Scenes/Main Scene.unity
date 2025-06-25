@@ -633,7 +633,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -980,6 +980,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Albert2
       objectReference: {fileID: 0}
+    - target: {fileID: 7071182760956848314, guid: c5295784fa0611af6b702862082a65dc, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 8b5655a60dda8b77ca754fe787e5cc98, type: 3}
+    - target: {fileID: 7202271454713460447, guid: c5295784fa0611af6b702862082a65dc, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 8b5655a60dda8b77ca754fe787e5cc98, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1086,6 +1094,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kai
       objectReference: {fileID: 0}
+    - target: {fileID: 7071182760956848314, guid: 9326ca3e95e5e61d19a0aa78f0bab353, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 2e021c01756a84d8ea96c9e8520966fe, type: 3}
+    - target: {fileID: 7202271454713460447, guid: 9326ca3e95e5e61d19a0aa78f0bab353, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 2e021c01756a84d8ea96c9e8520966fe, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
