@@ -6,6 +6,12 @@ public class Field : MonoBehaviour
     [SerializeField] private Ball ball;
     [SerializeField] private GameObject[] cubes;
 
+    private int envID; // Environment ID, if needed
+
+    private void Awake()
+    {
+        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
+    }
     private void Start()
     {
         Net.OnGoalScored += HandleGoalScored;
@@ -14,6 +20,7 @@ public class Field : MonoBehaviour
     private void HandleGoalScored(object sender, Net.OnGoalScoredEventArgs e)
     {
         // Reset positions
+        if (e.envID != envID) return; // Check if the event is for the current environment
         ResetAllPositions();
     }
 

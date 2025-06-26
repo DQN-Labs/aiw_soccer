@@ -12,11 +12,20 @@ public class Net : MonoBehaviour
     private float scoreCooldown = 0.5f; // seconds
     private float lastScoreTime = -1f;
 
+    private int envID; // Environment ID, if needed
+
     // Update event to use NetID in EventArgs
-    static public event EventHandler<OnGoalScoredEventArgs> OnGoalScored;
+    public static event EventHandler<OnGoalScoredEventArgs> OnGoalScored;
     public class OnGoalScoredEventArgs : EventArgs
     {
         public NetID netID;
+        public int envID; // Optional: if you want to include environment ID
+    }
+
+    private void Awake()
+    {
+       envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
+       Debug.Log($"Net ID: {netID}, Environment ID: {envID}");
     }
 
     // Remove OnCollisionEnter, add RegisterGoal to be called by GoalRegister
@@ -33,7 +42,8 @@ public class Net : MonoBehaviour
     {
         OnGoalScored?.Invoke(this, new OnGoalScoredEventArgs
         {
-            netID = netID
+            netID = netID,
+            envID = envID // Pass the environment ID if needed
         });
     }
 

@@ -9,7 +9,18 @@ public class ScoreScreen : Screen
 
     [SerializeField] private Net net;
 
+    private int envID; // Environment ID, if needed
+
     private int[] scoreAmount = new int[2]; // 0 for Player, 1 for Kai
+
+    private void Awake()
+    {
+        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
+        if (isSingleScoreScreen && net == null)
+        {
+            Debug.LogWarning("Single Score Screen mode selected, but no net assigned");
+        }
+    }
 
     private void OnValidate()
     {
@@ -36,10 +47,12 @@ public class ScoreScreen : Screen
 
     private void HandleGoalScored(object sender, Net.OnGoalScoredEventArgs e)
     {
+        if (e.envID != envID) return;
+
         // Add the received scoreIncrease to the current scoreAmount
         scoreAmount[0] += e.netID == NetID.AlbertNet ? 1 : 0;
         scoreAmount[1] += e.netID == NetID.KaiNet ? 1 : 0;
-        Debug.Log($"Goal Scored! Albert's Team: {scoreAmount[1]}, Kai's Team: {scoreAmount[0]}");
+        //Debug.Log($"Goal Scored! Albert's Team: {scoreAmount[1]}, Kai's Team: {scoreAmount[0]}");
         SetCanvasText(scoreAmount);
     }
 

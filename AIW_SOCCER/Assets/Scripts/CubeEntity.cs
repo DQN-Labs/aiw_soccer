@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 public enum ControlScheme
 {
     WASD_Arrows,
@@ -16,14 +17,13 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
     [SerializeField] private float kickRange = 3f;
     [SerializeField] private float kickAngleDegrees = 65f;
     [SerializeField] private float kickMagnitude = 30f;
+    [SerializeField] private float kickCooldown = 1f;
 
     [Tooltip("Choose which keys this agent should respond to when using Heuristic mode.")]
     [SerializeField] private ControlScheme controlScheme = ControlScheme.WASD_Arrows;
 
     private Vector3 initialPosition;
     private Rigidbody rigidBody;
-
-    
 
     // Dash-related variables
     private bool isDashing;
@@ -32,11 +32,18 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
     private float cooldownTimer;
     private Vector3 dashDirection;
 
+    // Kick-related variables
+    private bool canKick = true;
+    private float kickCooldownTimer;
+
+    private int envID;// Environment ID, if needed
+
     private void Awake()
     {
-        initialPosition = transform.position;
+        initialPosition = transform.localPosition;
         rigidBody = GetComponent<Rigidbody>();
-        
+
+        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
     }
 
     void FixedUpdate()
@@ -54,41 +61,11 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
 
     void Update()
     {
-        HandleDashInput();
         HandleCooldown();
-        HandleKickInput();
-    }
 
-    // M�todos de la interfaz ICubeEntity
-
-    public Vector3 GetInitialPosition()
-    {
-        return initialPosition;
-    }
-
-    public GameObject GetGameObject()
-    {
-        return gameObject;
-    }
-
-    public void ResetPosition(Vector3 initialPosition)
-    {
-        transform.position = initialPosition;
-        transform.rotation = Quaternion.Euler(0, -90, 0);
-    }
-    public Rigidbody GetRigidbody()
-    {
-        return rigidBody;
-    }
-
-    public ControlScheme GetControlScheme()
-    {
-        return controlScheme;
-    }
-
-    public void SetControlScheme(ControlScheme newControlScheme)
-    {
-        controlScheme = newControlScheme;
+        // This is handled in the Agent class
+        //HandleDashInput();
+        //HandleKickInput();
     }
 
     // Kick functionality
@@ -104,7 +81,9 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
 
     public void BKick()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position + transform.forward * 1.5f, kickRange);
+        if (!canKick) return; // Only kick if allowed
+
+        Collider[] hits = Physics.OverlapSphere(transform.localPosition + transform.forward * 1.5f, kickRange);
 
         foreach (Collider hit in hits)
         {
@@ -122,6 +101,9 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
                 rb.linearVelocity = kickVelocity;
             }
         }
+
+        canKick = false;
+        kickCooldownTimer = kickCooldown;
     }
 
     // Dash functionality
@@ -138,9 +120,15 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
             cooldownTimer -= Time.deltaTime;
             if (cooldownTimer <= 0f) canDash = true;
         }
+
+        if (!canKick)
+        {
+            kickCooldownTimer -= Time.deltaTime;
+            if (kickCooldownTimer <= 0f) canKick = true;
+        }
     }
 
-    private void StartDash()
+    public void StartDash()
     {
         isDashing = true;
         canDash = false;
@@ -158,5 +146,58 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
     {
         isDashing = false;
         rigidBody.linearVelocity = Vector3.zero;
+    }
+
+    public bool CanDash()
+    {
+        return canDash;
+    }
+
+    public bool IsDashing()
+    {
+        return isDashing;
+    }
+
+    public bool CanKick()
+    {
+        return canKick;
+    }
+
+    // ICubeEntity Methods
+
+    public Vector3 GetInitialPosition()
+    {
+        return initialPosition;
+    }
+
+    public GameObject GetGameObject()
+    {
+        return gameObject;
+    }
+
+    public void ResetPosition(Vector3 initialPosition)
+    {
+        transform.localPosition = initialPosition;
+        //transform.rotation = Quaternion.Euler(0, -90, 0);
+        rigidBody.linearVelocity = Vector3.zero;
+    }
+    public Rigidbody GetRigidbody()
+    {
+        return rigidBody;
+    }
+
+    public ControlScheme GetControlScheme()
+    {
+        return controlScheme;
+    }
+
+    public void SetControlScheme(ControlScheme newControlScheme)
+    {
+        controlScheme = newControlScheme;
+    }
+
+    public int GetEnvID()
+    {
+        return envID; // Return the environment ID
     }
 }

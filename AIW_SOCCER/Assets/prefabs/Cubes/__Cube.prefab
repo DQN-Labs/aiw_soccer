@@ -118,12 +118,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de35cead31cefa04189246e690912014, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashForce: 10
-  dashDuration: 0.2
-  dashCooldown: 1
-  kickRange: 3
-  kickAngleDegrees: 65
-  kickMagnitude: 300
+  dashForce: 6
+  dashDuration: 0.3
+  dashCooldown: 1.5
+  kickRange: 1
+  kickAngleDegrees: 30
+  kickMagnitude: 18
+  kickCooldown: 1
   controlScheme: 0
 --- !u!1001 &4859058143705946080
 PrefabInstance:
