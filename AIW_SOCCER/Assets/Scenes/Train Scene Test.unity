@@ -429,6 +429,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enviroment_TrainScene
       objectReference: {fileID: 0}
+    - target: {fileID: 4324364196085126069, guid: c5855269a815faf4881b5b9c3a8fe90e, type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 6819fbc3267c96143b4d85826a5a279c, type: 3}
+    - target: {fileID: 6633830292107475013, guid: c5855269a815faf4881b5b9c3a8fe90e, type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 842c4d9cdb497984696a07507fa6b026, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
