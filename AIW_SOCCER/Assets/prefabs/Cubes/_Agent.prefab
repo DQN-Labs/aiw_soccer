@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1184966678095936544, guid: 93b7f36c4f8889643b5e1a32433ea75d, type: 3}
       propertyPath: m_TagString
-      value: Player
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 1812927102753175169, guid: 93b7f36c4f8889643b5e1a32433ea75d, type: 3}
       propertyPath: m_Material
@@ -60,22 +60,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7510710737168129603, guid: 93b7f36c4f8889643b5e1a32433ea75d, type: 3}
-      propertyPath: dashForce
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 7510710737168129603, guid: 93b7f36c4f8889643b5e1a32433ea75d, type: 3}
-      propertyPath: dashCooldown
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7510710737168129603, guid: 93b7f36c4f8889643b5e1a32433ea75d, type: 3}
-      propertyPath: kickMagnitude
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 7510710737168129603, guid: 93b7f36c4f8889643b5e1a32433ea75d, type: 3}
-      propertyPath: kickAngleDegrees
-      value: 45
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 5742017450019580593, guid: 93b7f36c4f8889643b5e1a32433ea75d, type: 3}
@@ -96,6 +80,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1184966678095936544, guid: 93b7f36c4f8889643b5e1a32433ea75d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 9128733335229566796}
+    - targetCorrespondingSourceObject: {fileID: 1184966678095936544, guid: 93b7f36c4f8889643b5e1a32433ea75d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 905994613126460790}
   m_SourcePrefab: {fileID: 100100000, guid: 93b7f36c4f8889643b5e1a32433ea75d, type: 3}
 --- !u!4 &1573893637228402241 stripped
 Transform:
@@ -120,19 +107,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 13
-    NumStackedVectorObservations: 1
+    VectorObservationSize: 14
+    NumStackedVectorObservations: 5
     m_ActionSpec:
       m_NumContinuousActions: 0
-      BranchSizes: 030000000300000002000000
-    VectorActionSize: 030000000300000002000000
+      BranchSizes: 0300000003000000020000000200000002000000
+    VectorActionSize: 0300000003000000020000000200000002000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: Albert
+  m_BehaviorName: FootballAgent
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -187,16 +174,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb6b867a41448888c1cd4f99643ad71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SensorName: RayPerceptionSensor
+  m_SensorName: RayPerceptionSensor_Front
   m_DetectableTags:
-  - Barrier
-  - Goal1
-  - Goal2
-  - Player
   - Ball
-  m_RaysPerDirection: 5
-  m_MaxRayDegrees: 90
-  m_SphereCastRadius: 0.5
+  - Wall
+  - NetOrange
+  - NetOrange_GoalRegister
+  - NetBlue_GoalRegister
+  - NetBlue
+  - Kai
+  - Albert
+  m_RaysPerDirection: 18
+  m_MaxRayDegrees: 60
+  m_SphereCastRadius: 0.1
+  m_RayLength: 50
+  m_RayLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967291
+  m_ObservationStacks: 1
+  m_AlternatingRayOrder: 1
+  m_UseBatchedRaycasts: 0
+  rayHitColor: {r: 1, g: 0, b: 0, a: 1}
+  rayMissColor: {r: 1, g: 1, b: 1, a: 1}
+  m_StartVerticalOffset: 0
+  m_EndVerticalOffset: 0
+--- !u!114 &905994613126460790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3395278683921777962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb6b867a41448888c1cd4f99643ad71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SensorName: RayPerceptionSensor_Back
+  m_DetectableTags:
+  - Ball
+  - Wall
+  - NetOrange
+  - NetOrange_GoalRegister
+  - NetBlue_GoalRegister
+  - NetBlue
+  - Kai
+  - Albert
+  m_RaysPerDirection: 13
+  m_MaxRayDegrees: 180
+  m_SphereCastRadius: 0.1
   m_RayLength: 20
   m_RayLayerMask:
     serializedVersion: 2

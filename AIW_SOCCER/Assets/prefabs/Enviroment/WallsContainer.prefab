@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2411570825892178507}
   m_Layer: 0
   m_Name: LeftWall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 6644745604049601367}
   m_Layer: 0
   m_Name: RightWall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -230,7 +230,7 @@ GameObject:
   - component: {fileID: 5233615198514857099}
   m_Layer: 0
   m_Name: BackWall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -338,7 +338,7 @@ GameObject:
   - component: {fileID: 8718180977752156934}
   m_Layer: 0
   m_Name: Ceiling
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -495,7 +495,9 @@ MonoBehaviour:
   backScoreScreen: {fileID: 0}
   frontScoreScreen: {fileID: 0}
   sideBigScreen: {fileID: 0}
+  bigScreenHeight: 3
   sideSmallScreen: {fileID: 0}
+  smallScreenHeight: 1.5
 --- !u!1 &8175007603518363672
 GameObject:
   m_ObjectHideFlags: 0
@@ -510,7 +512,7 @@ GameObject:
   - component: {fileID: 8965455954112876958}
   m_Layer: 0
   m_Name: FrontWall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

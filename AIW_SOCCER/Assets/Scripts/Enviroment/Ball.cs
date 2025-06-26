@@ -8,13 +8,14 @@ public class Ball : MonoBehaviour
 
     private void Awake()
     {
-        initialPosition = transform.position;
+        initialPosition = transform.localPosition;
     }
 
     public void ResetPosition()
     {
-        transform.position = initialPosition;
-        transform.rotation = Quaternion.Euler(0, -90, 0);
+        transform.localPosition = initialPosition;
+        transform.rotation = Quaternion.Euler(0, 0, 0);
         GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
     }
 }

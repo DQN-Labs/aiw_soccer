@@ -8,6 +8,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3457495983426237125, guid: 57d65e34e7f3d4f4185e15733636ac10, type: 3}
+      propertyPath: TeamId
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3457495983426237125, guid: 57d65e34e7f3d4f4185e15733636ac10, type: 3}
+      propertyPath: m_BehaviorName
+      value: Albert_FootballAgent
+      objectReference: {fileID: 0}
     - target: {fileID: 182207936114688673, guid: 57d65e34e7f3d4f4185e15733636ac10, type: 3}
       propertyPath: controlScheme
       value: 1
@@ -56,9 +64,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Alber_Agent
       objectReference: {fileID: 0}
-    - target: {fileID: 9128733335229566796, guid: 57d65e34e7f3d4f4185e15733636ac10, type: 3}
-      propertyPath: m_SensorName
-      value: AlbertRayPerceptionSensor
+    - target: {fileID: 3395278683921777962, guid: 57d65e34e7f3d4f4185e15733636ac10, type: 3}
+      propertyPath: m_TagString
+      value: Albert
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

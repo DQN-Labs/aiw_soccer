@@ -5,6 +5,13 @@ public class CounterScreen : Screen
 {
     [SerializeField] private int iterationsCount = 0; // Number of iterations to display
 
+    private int envID; // Environment ID, if needed
+
+    private void Awake()
+    {
+        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
+    }
+
     private void Start()
     {
         FootballAgent.OnEpisodeEnd += FootballAgent_IncrementIterationsCount; // Subscribe to the episode end event
@@ -13,14 +20,20 @@ public class CounterScreen : Screen
 
     public void FootballAgent_IncrementIterationsCount(object sender, FootballAgent.OnEpisodeEndEventArgs e)
     {
-        SetIterationsCount(e.iterationCount);
-        SetCanvasText(iterationsCount.ToString());
+        if (e.envID == envID)
+        {
+            SetIterationsCount(e.iterationCount);
+            SetCanvasText(iterationsCount.ToString());
+        }
     }
 
-    public void TimeScreen_IncrementIterationsCount(object sender, EventArgs e)
+    public void TimeScreen_IncrementIterationsCount(object sender, TimeScreen.OnTimeLimitReachedEventArgs e)
     {
-        iterationsCount++;
-        SetCanvasText(iterationsCount.ToString());
+        if (e.envID == envID)
+        {
+            iterationsCount++;
+            SetCanvasText(iterationsCount.ToString());
+        }
     }
 
     public void SetIterationsCount(int count)
