@@ -83,7 +83,8 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
     {
         if (!canKick) return; // Only kick if allowed
 
-        Collider[] hits = Physics.OverlapSphere(transform.localPosition + transform.forward * 1.5f, kickRange);
+        // Important: Use POSITION to avoid problems with localPosition when working with multiple environments
+        Collider[] hits = Physics.OverlapSphere(transform.position + transform.forward * 1.5f, kickRange);
 
         foreach (Collider hit in hits)
         {
