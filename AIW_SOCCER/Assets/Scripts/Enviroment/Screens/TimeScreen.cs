@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 
 public class TimeScreen : Screen
 {
@@ -8,7 +9,19 @@ public class TimeScreen : Screen
     private int currentTime;
     private float timer = 0f;
 
-    public static event EventHandler OnTimeLimitReached; // Event to notify when the time limit is reached
+    private int envID; // Environment ID, if needed
+
+    public static event EventHandler<OnTimeLimitReachedEventArgs> OnTimeLimitReached; // Event to notify when the time limit is reached
+
+    public class OnTimeLimitReachedEventArgs : EventArgs
+    {
+        public int envID; // Environment ID when the time limit is reached
+    }
+
+    private void Awake()
+    {
+        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
+    }
 
     private void Start()
     {
@@ -33,17 +46,23 @@ public class TimeScreen : Screen
         else
         {
             Debug.Log("Time limit reached!");
-            OnTimeLimitReached?.Invoke(this, EventArgs.Empty); // Trigger the event when time limit is reached
+            OnTimeLimitReached?.Invoke(this, new OnTimeLimitReachedEventArgs
+            {
+                envID = envID // Trigger the event with the environment ID
+            }); // Trigger the event when time limit is reached
 
             ResetTime(); // Reset the time
             SetCanvasText(currentTime.ToString());
         }
     }
 
-    private void HandleEpisodeEnd(object sender, System.EventArgs e)
+    private void HandleEpisodeEnd(object sender, FootballAgent.OnEpisodeEndEventArgs e)
     {
-        ResetTime();
-        SetCanvasText(currentTime.ToString());
+        if (e.envID == envID)
+        {
+            ResetTime();
+            SetCanvasText(currentTime.ToString());
+        }
     }
 
     public void ResetTime()

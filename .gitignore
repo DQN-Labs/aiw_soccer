@@ -89,10 +89,10 @@ crashlytics-build.properties
 /[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers.meta
 /AIW_SOCCER/Temp
 /AIW_SOCCER/UserSettings
-/AIW_SOCCER_20JUNE25/UserSettings
-/AIW_SOCCER/UserSettings
 /AIW_SOCCER/obj/Debug
 /AIW_SOCCER/UserSettings
-/AIW_SOCCER/UserSettings
-/AIW_SOCCER/UserSettings
-/AIW_SOCCER/UserSettings
+results/
+venv/
+3.19.0
+AIW_SOCCER/UserSettings/EditorUserSettings.asset
+AIW_SOCCER/UserSettings/Layouts/default-6000.dwlt
