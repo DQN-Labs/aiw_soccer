@@ -6,10 +6,16 @@ public class WallsContainer : MonoBehaviour
     [Header("Wall References")]
     [SerializeField] private GameObject backWall;
     [SerializeField] private GameObject frontWall;
-    [SerializeField] private GameObject rightWall;
     [SerializeField] private GameObject leftWall;
+    [SerializeField] private GameObject rightWall;
     [SerializeField] private GameObject ceiling;
     [SerializeField] private GameObject floor; // Optional, if you want to include a floor
+
+    [Header("Corner Bumps")]
+    [SerializeField] private GameObject bumpTopLeft;
+    [SerializeField] private GameObject bumpTopRight;
+    [SerializeField] private GameObject bumpBottomLeft;
+    [SerializeField] private GameObject bumpBottomRight;
 
     [Header("Room Dimensions")]
     [SerializeField] private float width = 5f;
@@ -66,24 +72,24 @@ public class WallsContainer : MonoBehaviour
             frontWall.transform.localScale = new Vector3(thickness, height, width);
         }
 
-        // Right Wall (X+)
-        if (rightWall != null)
-        {
-            rightWall.transform.localPosition = new Vector3(
-                0, 
-                height / 2f, 
-                width / 2f + thickness / 2f);
-            rightWall.transform.localScale = new Vector3(depth, height, thickness);
-        }
-
-        // Left Wall (X-)
+        // Left Wall (X+)
         if (leftWall != null)
         {
             leftWall.transform.localPosition = new Vector3(
-                0, 
-                height / 2f, 
+                0,
+                height / 2f,
                 -width / 2f - thickness / 2f);
             leftWall.transform.localScale = new Vector3(depth, height, thickness);
+        }
+
+        // Right Wall (X-)
+        if (rightWall != null)
+        {
+            rightWall.transform.localPosition = new Vector3(
+                0,
+                height / 2f,
+                width / 2f + thickness / 2f);
+            rightWall.transform.localScale = new Vector3(depth, height, thickness);
         }
 
         // Ceiling (Y+)
@@ -139,6 +145,42 @@ public class WallsContainer : MonoBehaviour
                 smallScreenHeight + height / 2f, 
                 -0.1f + width / 2f);
             sideSmallScreen.transform.localRotation = Quaternion.Euler(0, 90, 0);
+        }
+
+        if (bumpBottomLeft != null)
+        {
+            bumpBottomLeft.transform.localPosition = new Vector3(
+                -depth / 2f,
+                floorHeight,
+                -width / 2f);
+            bumpBottomLeft.transform.localScale = new Vector3(1f, height, 1f);
+        }
+
+        if (bumpBottomRight != null)
+        {
+            bumpBottomRight.transform.localPosition = new Vector3(
+                -depth / 2f,
+                floorHeight,
+                width / 2f);
+            bumpBottomRight.transform.localScale = new Vector3(1f, height, 1f);
+        }
+
+        if (bumpTopLeft)
+        {
+            bumpTopLeft.transform.localPosition = new Vector3(
+                depth / 2f,
+                floorHeight,
+                -width / 2f);
+            bumpTopLeft.transform.localScale = new Vector3(1f, height, 1f);
+        }
+
+        if (bumpTopRight)
+        {
+            bumpTopRight.transform.localPosition = new Vector3(
+                depth / 2f,
+                floorHeight,
+                width / 2f);
+            bumpTopRight.transform.localScale = new Vector3(1f, height, 1f);
         }
     }
 }

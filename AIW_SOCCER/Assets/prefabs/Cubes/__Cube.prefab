@@ -123,7 +123,7 @@ MonoBehaviour:
   dashCooldown: 1.5
   kickRange: 1
   kickAngleDegrees: 30
-  kickMagnitude: 18
+  kickMagnitude: 25
   kickCooldown: 1
   controlScheme: 0
 --- !u!1001 &4859058143705946080

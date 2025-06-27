@@ -409,10 +409,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4324364196085126069, guid: c5855269a815faf4881b5b9c3a8fe90e, type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: e47d361e810238d4087c97eecd6a13c8, type: 3}
     - target: {fileID: 6052493211976936388, guid: c5855269a815faf4881b5b9c3a8fe90e, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6633830292107475013, guid: c5855269a815faf4881b5b9c3a8fe90e, type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 4b68e954c2ae01f46b62cd22e55d03f0, type: 3}
     - target: {fileID: 7962626703812451375, guid: c5855269a815faf4881b5b9c3a8fe90e, type: 3}
       propertyPath: netTarget
       value: 
