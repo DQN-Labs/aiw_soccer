@@ -67,11 +67,11 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         else cubeEntity.ResetPosition(cubeEntity.GetInitialPosition()); // Use the initial position
 
         // Add randomness to the spawn position within a range
-        transform.localPosition += new Vector3(UnityEngine.Random.Range(-2f, 2f), 0.0f, UnityEngine.Random.Range(-2f, 2f));
+        transform.localPosition += new Vector3(UnityEngine.Random.Range(-2f, 2f), 0.0f, UnityEngine.Random.Range(-4f, 4f));
         transform.localRotation = Quaternion.Euler(0, UnityEngine.Random.Range(0f, 360f), 0);
 
         ball.ResetPosition(); // Reset the ball position back to the starting position
-        ball.transform.localPosition += new Vector3(UnityEngine.Random.Range(-1f, 1f), 0.0f, UnityEngine.Random.Range(-1f, 1f));
+        ball.transform.localPosition += new Vector3(UnityEngine.Random.Range(-1f, 1f), 0.0f, UnityEngine.Random.Range(-4f, 4f));
     }
 
     public override void CollectObservations(VectorSensor sensor)
