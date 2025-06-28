@@ -25,7 +25,6 @@ public class Net : MonoBehaviour
     private void Awake()
     {
        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
-       Debug.Log($"Net ID: {netID}, Environment ID: {envID}");
     }
 
     // Remove OnCollisionEnter, add RegisterGoal to be called by GoalRegister
