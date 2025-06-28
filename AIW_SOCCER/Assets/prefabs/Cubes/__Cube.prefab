@@ -122,8 +122,8 @@ MonoBehaviour:
   dashDuration: 0.3
   dashCooldown: 1.5
   kickRange: 1
-  kickAngleDegrees: 30
-  kickMagnitude: 25
+  kickAngleDegrees: 45
+  kickMagnitude: 30
   kickCooldown: 1
   controlScheme: 0
 --- !u!1001 &4859058143705946080

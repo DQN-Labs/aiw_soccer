@@ -178,9 +178,14 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
 
     public void ResetPosition(Vector3 initialPosition)
     {
-        transform.localPosition = initialPosition;
-        //transform.rotation = Quaternion.Euler(0, -90, 0);
         rigidBody.linearVelocity = Vector3.zero;
+        rigidBody.angularVelocity = Vector3.zero;
+
+        transform.localPosition = initialPosition;
+
+        rigidBody.position = transform.position; 
+        rigidBody.rotation = transform.rotation; 
+
     }
     public Rigidbody GetRigidbody()
     {

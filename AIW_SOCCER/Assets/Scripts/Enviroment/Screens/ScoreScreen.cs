@@ -75,9 +75,6 @@ public class ScoreScreen : Screen
         // Format and set the score text
         if (!isSingleScoreScreen) scoreText.text = $"{newScoreAmount[0]} - {newScoreAmount[1]}";
         else if (isSingleScoreScreen && net != null) {
-            Debug.Log($"This is my net:");
-            Debug.Log($"Setting score text for net: {net.GetNetID()} with score: {newScoreAmount[0]} - {newScoreAmount[1]}");
-            Debug.Log($"Does it have a text? {scoreText.text != null}");
             scoreText.text = net.GetNetID() == NetID.AlbertNet ? $"{newScoreAmount[1]}" : $"{newScoreAmount[0]}";
         }
 
