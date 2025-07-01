@@ -1,0 +1,62 @@
+behaviors:
+  Albert_FootballAgent:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 2048
+      buffer_size: 24576 # Bigger buffer size for more stable training
+      learning_rate: 1.0e-4 # Smaller learning rate for more stable training
+      learning_rate_schedule: constant
+
+      beta: 1.0e-2
+      beta_schedule: linear    # Schedule to reduce exploration over time
+
+      epsilon: 0.2
+      epsilon_schedule: linear
+
+      lambd: 0.95 
+      num_epoch: 3
+    
+    network_settings:
+      normalize: false
+      hidden_units: 512
+      num_layers: 2
+    
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+    
+    max_steps: 15000000
+    time_horizon: 2048
+    summary_freq: 25000
+    
+  Kai_FootballAgent:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 2048
+      buffer_size: 24576 # Bigger buffer size for more stable training
+      learning_rate: 1.0e-4 # Smaller learning rate for more stable training
+      learning_rate_schedule: constant
+
+      beta: 1.0e-2
+      beta_schedule: linear    # Schedule to reduce exploration over time
+
+      epsilon: 0.2
+      epsilon_schedule: linear
+
+      lambd: 0.95 
+      num_epoch: 3
+    
+    network_settings:
+      normalize: false
+      hidden_units: 512
+      num_layers: 2
+    
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+    
+    max_steps: 15000000
+    time_horizon: 2048
+    summary_freq: 25000

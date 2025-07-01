@@ -4,31 +4,33 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine.Assertions.Must;
 using System;
+using Unity.VisualScripting.FullSerializer;
 
 
 // Rewards Constants
-public static class Rewards
+public struct Rewards
 {
     // --- Terminal Rewards (The Main Goal) ---
-    public const float GoalScoredReward = 10.0f;
-    public const float GoalConcededPenalty = -10.0f;
+    public const float GoalScoredReward = 1.0f;
+    public const float GoalConcededPenalty = -1.0f;
 
     // --- Penalties ---
-    public const float TimeLimitPenalty = -5f; // Penalty for not scoring in time.
+    public const float TimeLimitPenalty = -0.5f; // Penalty for not scoring in time.
     public const float MovePenalty = -0.0001f;   // Small penalty for every step to encourage speed.
 
     // --- Shaping Rewards ---
     // Reward for moving towards the ball.
-    public const float ApproachBallReward = 0.0002f;
+    public const float ApproachBallReward = 0.0001f;
 
     // Reward for the ball going TOWARDS the opponent's goal.
-    public const float BallMovingTowardGoal = 0.05f;
+    public const float BallMovingTowardGoal = 0.002f;
 
     // A small one-time reward for touching the ball.
-    public const float BallTouchReward = 0.05f;
+    public const float BallTouchReward = 0.0005f;
 
-    public const float kickPenalty = -0.01f; // Penalty for kicking the ball, to encourage strategic kicking
-    public const float dashPenalty = -0.01f; // Penalty for dashing, to encourage strategic dashing
+    public const float kickPenalty = -0.005f; // Penalty for kicking the ball, to encourage strategic kicking
+    public const float dashPenalty = -0.002f; // Penalty for dashing, to encourage strategic dashing
+    public const float jumpPenalty = -0.002f; // Penalty for jumping, to encourage strategic jumping
 }
 
 public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
@@ -45,6 +47,7 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
     [SerializeField] private Transform spawnPosition; // This is not necessary
     private GoalRegister goalRegisterTarget;
 
+    private Rigidbody ballRigidBody; // Reference to the ball's rigidbody
     private CubeEntity cubeEntity;
     private Rigidbody rigidBody;
     private bool isGrounded;
@@ -61,16 +64,20 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
 
     // --- Variables using for the rewards ---
     private float lastBallDistance;
-    private float lastBallTouchTime = -10f;
-    private float ballTouchCooldown = 0.2f; // seconds before the agent gets another reward for touching the ball
+
+    // --- Add this flag to track ball collision ---
+    private bool isCollidingWithBall = false;
+    private float stepsControllingBall = 0f;
 
     // --- StatsRecorder ---
     private StatsRecorder statsRecorder; // Reference to the StatsRecorder for logging
+
 
     public override void Initialize()
     {
         rigidBody = GetComponent<Rigidbody>();
         cubeEntity = GetComponent<CubeEntity>();
+        ballRigidBody = ball.GetComponent<Rigidbody>();
         goalRegisterTarget = netTarget.GetComponentInChildren<GoalRegister>();
 
         Net.OnGoalScored += HandleGoalScored; // Subscribe to goal scored event
@@ -108,7 +115,6 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         ResetPosition(transform.localPosition);
 
         lastBallDistance = Vector3.Distance(transform.localPosition, ball.transform.localPosition);
-        lastBallTouchTime = -10f;
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -123,6 +129,7 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         // Ball
         sensor.AddObservation(GetAgentBallDotProduct()); // 1
         sensor.AddObservation(ball.GetComponent<Rigidbody>().linearVelocity); // 3
+        sensor.AddObservation(isCollidingWithBall); // 1
 
         // Goal register position
         sensor.AddObservation(GetAgentGoalDotProduct()); // 1
@@ -176,6 +183,8 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         {
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
+            AddReward(Rewards.jumpPenalty);
+            statsRecorder.Add($"Rewards/{name}/jumpPenalty", Rewards.jumpPenalty, StatAggregationMethod.Sum);
         }
 
         // Kicking
@@ -184,6 +193,7 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
             cubeEntity.BKick();
             AddReward(Rewards.kickPenalty);
             statsRecorder.Add($"Football/{name}/KicksAttempted", 1f, StatAggregationMethod.Sum);
+            statsRecorder.Add($"Rewards/{name}/kickPenalty", Rewards.kickPenalty, StatAggregationMethod.Sum);
         }
 
         // Dashing
@@ -191,6 +201,7 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         {
             cubeEntity.StartDash();
             AddReward(Rewards.dashPenalty);
+            statsRecorder.Add($"Rewards/{name}/DashPenalty", Rewards.dashPenalty, StatAggregationMethod.Sum);
         }
 
         // --- ApproachBallReward ---
@@ -198,26 +209,39 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         if (currentBallDistance < lastBallDistance)
         {
             AddReward(Rewards.ApproachBallReward);
+            statsRecorder.Add($"Rewards/{name}/ApproachBallReward", Rewards.ApproachBallReward, StatAggregationMethod.Sum);
         }
         lastBallDistance = currentBallDistance;
 
         // 2. BallMovingTowardGoalReward
-        Vector3 ballVelocity = ball.GetComponent<Rigidbody>().linearVelocity;
-        if (ballVelocity.magnitude > 0.1f)
+        Vector3 ballVelocity = ballRigidBody.linearVelocity;
+        if (ballVelocity.sqrMagnitude > 0.01f)
         {
             Vector3 directionToGoal = (goalRegisterTarget.transform.localPosition - ball.transform.localPosition).normalized;
             float dot = Vector3.Dot(ballVelocity.normalized, directionToGoal);
 
-            // We only reward positive dot products (ball moving towards goal)
             if (dot > 0.5f)
             {
-                // The reward is proportional to how fast the ball is moving AND how accurate the shot is.
-                AddReward(Rewards.BallMovingTowardGoal * dot * (ballVelocity.magnitude / 4.5f)); // Scale by velocity, avg is 4.5 rn but this can change
-                statsRecorder.Add($"Football/{name}/ProductiveShotPower", ballVelocity.magnitude, StatAggregationMethod.Histogram);
+                float velocity = ballVelocity.magnitude;
+                if (velocity > 5f) velocity = 5f; // Sometimes this equals the ball kick power (30), but we dont want that
+
+                AddReward(Rewards.BallMovingTowardGoal * dot * (velocity / 5f));
+                statsRecorder.Add($"Rewards/{name}/BallMovingTowardGoal", Rewards.BallMovingTowardGoal * dot * (velocity / 5f), StatAggregationMethod.Sum);
+                statsRecorder.Add($"Football/{name}/ProductiveShotPower", velocity, StatAggregationMethod.Histogram);
             }
         }
 
+        // --- Add BallTouchReward for every step in collision with the ball ---
+        if (isCollidingWithBall)
+        {
+            AddReward(Rewards.BallTouchReward);
+            statsRecorder.Add($"Rewards/{name}/BallTouchReward", Rewards.BallTouchReward, StatAggregationMethod.Sum);
+            stepsControllingBall += 1f;
+        }
+
         AddReward(Rewards.MovePenalty);
+        statsRecorder.Add($"Rewards/{name}/MovePenalty", Rewards.MovePenalty, StatAggregationMethod.Sum);
+        statsRecorder.Add($"Football/steps_per_episode", 1f, StatAggregationMethod.Sum);
     }
 
     private void HandleGoalScored(object Sender, Net.OnGoalScoredEventArgs e)
@@ -228,11 +252,14 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
         {
             AddReward(Rewards.GoalScoredReward); // Add reward if the goal was scored in the agent's target net
             statsRecorder.Add($"Football/{name}/GoalsScored", 1, StatAggregationMethod.Sum); // Increment the goals scored counter in StatsRecorder
+            statsRecorder.Add($"Rewards/{name}/GoalScoredReward", Rewards.GoalScoredReward, StatAggregationMethod.Sum);
         }
-        else 
+        else
+        {
             AddReward(Rewards.GoalConcededPenalty); // Add penalty if the goal was scored in the agent's net
+            statsRecorder.Add($"Rewards/{name}/GoalConcededPenalty", Rewards.GoalConcededPenalty, StatAggregationMethod.Sum);
+        }
 
-        //Debug.Log($"Goal scored: Reward for {gameObject.name}: {GetCumulativeReward()}");
         iterationCount++;
         OnEpisodeEnd?.Invoke(this, new OnEpisodeEndEventArgs {
             envID = cubeEntity.GetEnvID(), // This can be used to identify the environment if needed
@@ -296,15 +323,21 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
             isGrounded = true;
         }
 
-        // --- BallTouchReward ---
+        // --- Set flag if colliding with ball ---
         if (collision.gameObject.CompareTag("Ball"))
         {
-            if (Time.time - lastBallTouchTime > ballTouchCooldown)
-            {
-                AddReward(Rewards.BallTouchReward);
-                lastBallTouchTime = Time.time;
-                statsRecorder.Add($"Football/{name}/BallTouches", 1f, StatAggregationMethod.Sum);
-            }
+            isCollidingWithBall = true;
+            stepsControllingBall = 0f;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        // --- Unset flag when no longer colliding with ball ---
+        if (collision.gameObject.CompareTag("Ball"))
+        {
+            isCollidingWithBall = false;
+            statsRecorder.Add($"Football/{name}/StepsTouchingBall", stepsControllingBall, StatAggregationMethod.Sum);
         }
     }
 
@@ -344,4 +377,6 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
     {
         return gameObject;
     }
+
+
 }

@@ -42,7 +42,10 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
     {
         initialPosition = transform.localPosition;
         rigidBody = GetComponent<Rigidbody>();
+    }
 
+    public void Start()
+    {
         envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
     }
 
