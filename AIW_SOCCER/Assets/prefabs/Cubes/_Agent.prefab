@@ -110,8 +110,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 14
-    NumStackedVectorObservations: 5
+    VectorObservationSize: 15
+    NumStackedVectorObservations: 8
     m_ActionSpec:
       m_NumContinuousActions: 0
       BranchSizes: 0300000003000000020000000200000002000000
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 5
+  DecisionPeriod: 6
   DecisionStep: 0
   TakeActionsBetweenDecisions: 1
 --- !u!114 &9128733335229566796
@@ -231,7 +231,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967227
   m_ObservationStacks: 1
-  m_AlternatingRayOrder: 1
+  m_AlternatingRayOrder: 0
   m_UseBatchedRaycasts: 0
   rayHitColor: {r: 1, g: 0.687101, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}

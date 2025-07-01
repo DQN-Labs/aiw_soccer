@@ -8,12 +8,9 @@ public class Field : MonoBehaviour
 
     private int envID; // Environment ID, if needed
 
-    private void Awake()
-    {
-        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
-    }
     private void Start()
     {
+        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
         Net.OnGoalScored += HandleGoalScored;
     }
 

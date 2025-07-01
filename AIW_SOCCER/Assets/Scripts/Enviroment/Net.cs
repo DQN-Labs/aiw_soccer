@@ -22,7 +22,7 @@ public class Net : MonoBehaviour
         public int envID; // Optional: if you want to include environment ID
     }
 
-    private void Awake()
+    private void Start()
     {
        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
     }

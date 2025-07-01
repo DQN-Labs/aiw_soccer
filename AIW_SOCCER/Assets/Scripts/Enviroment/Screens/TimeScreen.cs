@@ -18,13 +18,10 @@ public class TimeScreen : Screen
         public int envID; // Environment ID when the time limit is reached
     }
 
-    private void Awake()
-    {
-        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
-    }
-
     private void Start()
     {
+        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
+
         FootballAgent.OnEpisodeEnd += HandleEpisodeEnd; // Subscribe to the episode end event
 
         currentTime = timeLimit; // Initialize current time

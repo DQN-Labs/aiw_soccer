@@ -13,14 +13,7 @@ public class ScoreScreen : Screen
 
     private int[] scoreAmount = new int[2]; // 0 for Player, 1 for Kai
 
-    private void Awake()
-    {
-        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
-        if (isSingleScoreScreen && net == null)
-        {
-            Debug.LogWarning("Single Score Screen mode selected, but no net assigned");
-        }
-    }
+
 
     private void OnValidate()
     {
@@ -36,6 +29,8 @@ public class ScoreScreen : Screen
 
     private void Start()
     {
+        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
+
         if (isSingleScoreScreen && net == null)
         {
             Debug.LogWarning("Single Score Screen mode selected, but no net assigned");

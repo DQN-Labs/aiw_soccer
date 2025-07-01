@@ -7,13 +7,9 @@ public class CounterScreen : Screen
 
     private int envID; // Environment ID, if needed
 
-    private void Awake()
-    {
-        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
-    }
-
     private void Start()
     {
+        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
         FootballAgent.OnEpisodeEnd += FootballAgent_IncrementIterationsCount; // Subscribe to the episode end event
         TimeScreen.OnTimeLimitReached += TimeScreen_IncrementIterationsCount; // Subscribe to the time limit reached event
     }
