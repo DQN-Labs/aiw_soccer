@@ -91,3 +91,4 @@ results/
 venv/
 /3.19.0/
 *.dwlt
+*.meta
