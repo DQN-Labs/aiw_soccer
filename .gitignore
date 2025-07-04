@@ -13,7 +13,6 @@
 *.log
 
 # General settings:
-/ProjectSettings/
 /Layouts/
 
 # By default unity supports Blender asset imports, *.blend1 blender files do not need to be commited to version control.
@@ -88,12 +87,7 @@ crashlytics-build.properties
 /[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers
 /[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers.meta
 /AIW_SOCCER/Temp
-/AIW_SOCCER/UserSettings
-/AIW_SOCCER/obj/Debug
-/AIW_SOCCER/UserSettings
 results/
 venv/
-3.19.0
-AIW_SOCCER/UserSettings/EditorUserSettings.asset
-AIW_SOCCER/UserSettings/Layouts/default-6000.dwlt
-*.meta
+/3.19.0/
+*.dwlt
