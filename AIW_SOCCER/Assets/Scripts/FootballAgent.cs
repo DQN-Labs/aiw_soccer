@@ -11,8 +11,7 @@ using UnityEngine;
 
 #region Rewards Constants
 
-public struct Rewards
-{
+public struct Rewards {
     public const float GoalScoredReward = 1.0f;
     public const float GoalConcededPenalty = -1.0f;
 
@@ -39,7 +38,7 @@ public struct Rewards
 //     public const float BallTouchReward = 0.05f;
 //     public const float kickPenalty = -0.01f;
 //     public const float dashPenalty = -0.01f;
-// }
+}
 #endregion
 
 public class FootballAgent : Agent
@@ -113,8 +112,8 @@ public class FootballAgent : Agent
     public override void OnEpisodeBegin()
     {
         lastBallDistance = Vector3.Distance(transform.localPosition, ball.transform.localPosition);
-        lastBallToGoalDistance = Vector3.Distance(ball.transform.localPosition, goalRegisterTarget.transform.localPosition);
-        lastBallTouchTime = -10f;
+        //lastBallToGoalDistance = Vector3.Distance(ball.transform.localPosition, goalRegisterTarget.transform.localPosition);
+        //lastBallTouchTime = -10f;
     }
 
     #endregion
@@ -135,18 +134,6 @@ public class FootballAgent : Agent
         sensor.AddObservation(GetAgentGoalDotProduct());
         // sensor.AddObservation(ball.GetComponent<Rigidbody>().linearVelocity);
         // sensor.AddObservation(GetAgentGoalDotProduct());
-    }
-
-    public float GetAgentBallDotProduct()
-    {
-        Vector3 directionToBall = (ball.transform.localPosition - transform.localPosition).normalized;
-        return Vector3.Dot(transform.forward, directionToBall);
-    }
-
-    private float GetAgentGoalDotProduct()
-    {
-        Vector3 directionToGoal = (goalRegisterTarget.transform.localPosition - transform.localPosition).normalized;
-        return Vector3.Dot(transform.forward, directionToGoal);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -213,14 +200,12 @@ public class FootballAgent : Agent
         }
 
         // 3. NEW: Ball closer to goal reward (distance reducing version)
-        float currentBallToGoalDistance = Vector3.Distance(ball.transform.localPosition, goalRegisterTarget.transform.localPosition);
-        if (currentBallToGoalDistance < lastBallToGoalDistance)
-        {
-            AddReward(0.005f);
-        }
-        lastBallToGoalDistance = currentBallToGoalDistance;
-
-        
+        //float currentBallToGoalDistance = Vector3.Distance(ball.transform.localPosition, goalRegisterTarget.transform.localPosition);
+        //if (currentBallToGoalDistance < lastBallToGoalDistance)
+        //{
+        //    AddReward(0.005f);
+        //}
+        //lastBallToGoalDistance = currentBallToGoalDistance;
 
         AddReward(Rewards.MovePenalty);
     }
@@ -337,15 +322,19 @@ public class FootballAgent : Agent
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ball"))
-        {
-            if (Time.time - lastBallTouchTime > ballTouchCooldown)
-            {
-                AddReward(Rewards.BallTouchReward);
-                lastBallTouchTime = Time.time;
-                statsRecorder.Add($"Football/{name}/BallTouches", 1f, StatAggregationMethod.Sum);
-            }
-        }
+        //if (collision.gameObject.CompareTag("Ball"))
+        //{
+        //    if (Time.time - lastBallTouchTime > ballTouchCooldown)
+        //    {
+        //        AddReward(Rewards.BallTouchReward);
+        //        lastBallTouchTime = Time.time;
+        //        statsRecorder.Add($"Football/{name}/BallTouches", 1f, StatAggregationMethod.Sum);
+        //    }
+        //}
+
+        statsRecorder.Add($"Football/{name}/stepsControllingBall", stepsControllingBall, StatAggregationMethod.Sum);
+        isCollidingWithBall = false;
+        stepsControllingBall = 0f;
     }
     #endregion
 
