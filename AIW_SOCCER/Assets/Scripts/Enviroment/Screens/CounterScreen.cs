@@ -3,43 +3,32 @@ using UnityEngine;
 
 public class CounterScreen : Screen
 {
-    [SerializeField] private int iterationsCount = 0; // Number of iterations to display
-
-    private int envID; // Environment ID, if needed
+    [SerializeField] private FootballEnvController envController;
 
     private void Start()
     {
-        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
-        FootballAgent.OnEpisodeEnd += FootballAgent_IncrementIterationsCount; // Subscribe to the episode end event
-        TimeScreen.OnTimeLimitReached += TimeScreen_IncrementIterationsCount; // Subscribe to the time limit reached event
-    }
-
-    public void FootballAgent_IncrementIterationsCount(object sender, FootballAgent.OnEpisodeEndEventArgs e)
-    {
-        if (e.envID == envID)
+        if (envController == null)
         {
-            SetIterationsCount(e.iterationCount);
-            SetCanvasText(iterationsCount.ToString());
+            envController = GetComponentInParent<FootballEnvController>();
+        }
+
+        if (envController != null)
+        {
+            envController.OnIterationsCountChanged += UpdateDisplay;
+            UpdateDisplay(envController.IterationsCount);
         }
     }
 
-    public void TimeScreen_IncrementIterationsCount(object sender, TimeScreen.OnTimeLimitReachedEventArgs e)
+    private void OnDestroy()
     {
-        if (e.envID == envID)
+        if (envController != null)
         {
-            iterationsCount++;
-            SetCanvasText(iterationsCount.ToString());
+            envController.OnIterationsCountChanged -= UpdateDisplay;
         }
     }
 
-    public void SetIterationsCount(int count)
+    private void UpdateDisplay(int count)
     {
-        iterationsCount = count;
         SetCanvasText(count.ToString());
-    }
-
-    public int GetIterationsCount()
-    {
-        return iterationsCount;
     }
 }

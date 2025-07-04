@@ -18,7 +18,7 @@ public class EnviromentSpawner : MonoBehaviour
             children[i] = transform.GetChild(i).gameObject;
 
         foreach (var child in children)
-            child.GetComponent<Enviroment>()?.DestroyEnviroment();
+            child.GetComponent<Enviroment_Old>()?.DestroyEnviroment();
 
         if (enviromentSO == null || enviromentSO.envPrefab == null)
         {
@@ -47,7 +47,7 @@ public class EnviromentSpawner : MonoBehaviour
                     Debug.LogWarning($"The environment prefab '{env.name}' is missing the EnvironmentVisibilityController script!", env);
                 }
 
-                var envComponent = env.GetComponent<Enviroment>();
+                var envComponent = env.GetComponent<FootballEnvController>();
                 if (envComponent != null)
                     envComponent.SetEnviromentID(row * columns + col);
 

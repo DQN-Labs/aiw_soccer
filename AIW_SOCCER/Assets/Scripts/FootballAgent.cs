@@ -1,24 +1,50 @@
-using UnityEngine;
+#region Using Directives
+using NUnit;
+using System;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Policies;
 using Unity.MLAgents.Sensors;
-using System;
+using Unity.VisualScripting.FullSerializer;
+using UnityEngine;
+#endregion
 
-public static class Rewards
+#region Rewards Constants
+
+public struct Rewards
 {
-    public const float GoalScoredReward = 10.0f;
-    public const float GoalConcededPenalty = -10.0f;
-    public const float TimeLimitPenalty = -5f;
+    public const float GoalScoredReward = 1.0f;
+    public const float GoalConcededPenalty = -1.0f;
+
+    public const float TimeLimitPenalty = -0.5f;
     public const float MovePenalty = -0.0001f;
-    public const float ApproachBallReward = 0.0002f;
-    public const float BallMovingTowardGoal = 0.05f;
-    public const float BallTouchReward = 0.05f;
-    public const float kickPenalty = -0.01f;
-    public const float dashPenalty = -0.01f;
-}
 
-public class FootballAgent : Agent, ICubeEntity
+    public const float ApproachBallReward = 0.0001f;
+    public const float BallMovingTowardGoal = 0.002f;
+    public const float BallTouchReward = 0.0005f;
+
+    public const float kickPenalty = -0.005f;
+    public const float dashPenalty = -0.002f;
+    public const float jumpPenalty = -0.002f;
+// using System;
+
+// public static class Rewards
+// {
+//     public const float GoalScoredReward = 10.0f;
+//     public const float GoalConcededPenalty = -10.0f;
+//     public const float TimeLimitPenalty = -5f;
+//     public const float MovePenalty = -0.0001f;
+//     public const float ApproachBallReward = 0.0002f;
+//     public const float BallMovingTowardGoal = 0.05f;
+//     public const float BallTouchReward = 0.05f;
+//     public const float kickPenalty = -0.01f;
+//     public const float dashPenalty = -0.01f;
+// }
+#endregion
+
+public class FootballAgent : Agent
 {
+    #region Serialized Fields
     [Header("Movement Attributes")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotationSpeed;
@@ -28,69 +54,72 @@ public class FootballAgent : Agent, ICubeEntity
     [Header("References")]
     [SerializeField] private Ball ball;
     [SerializeField] private Net netTarget;
-    [SerializeField] private Transform spawnPosition;
-    private GoalRegister goalRegisterTarget;
+    #endregion
 
+    #region Private Fields
+    private GoalRegister goalRegisterTarget;
     private CubeEntity cubeEntity;
     private Rigidbody rigidBody;
+    private Rigidbody ballRigidBody;
     private bool isGrounded;
+    private bool isCollidingWithBall = false;
+    private float stepsControllingBall = 0f;
+    private float lastBallDistance = -10f;
 
-    private int iterationCount = 0;
+    // private int iterationCount = 0;
 
-    public static event EventHandler<OnEpisodeEndEventArgs> OnEpisodeEnd;
+    // public static event EventHandler<OnEpisodeEndEventArgs> OnEpisodeEnd;
 
-    public class OnEpisodeEndEventArgs : EventArgs
-    {
-        public int envID = 0;
-        public int iterationCount = 0;
-    }
+    // public class OnEpisodeEndEventArgs : EventArgs
+    // {
+    //     public int envID = 0;
+    //     public int iterationCount = 0;
+    // }
 
-    private float lastBallDistance;
-    private float lastBallToGoalDistance;
-    private float lastBallTouchTime = -10f;
-    private float ballTouchCooldown = 0.2f;
+    // private float lastBallDistance;
+    // private float lastBallToGoalDistance;
+    // private float lastBallTouchTime = -10f;
+    // private float ballTouchCooldown = 0.2f;
 
     private StatsRecorder statsRecorder;
+    #endregion
 
+    public Team team;
+
+    #region Unity Lifecycle
     public override void Initialize()
     {
         rigidBody = GetComponent<Rigidbody>();
         cubeEntity = GetComponent<CubeEntity>();
         goalRegisterTarget = netTarget.GetComponentInChildren<GoalRegister>();
 
-        Net.OnGoalScored += HandleGoalScored;
-        TimeScreen.OnTimeLimitReached += HandleTimeLimitReached;
         controlScheme = cubeEntity.GetControlScheme();
 
-        lastBallDistance = Vector3.Distance(transform.localPosition, ball.transform.localPosition);
         isGrounded = true;
+        lastBallDistance = Vector3.Distance(transform.localPosition, ball.transform.localPosition);
 
         statsRecorder = Academy.Instance.StatsRecorder;
     }
 
+    private void Start()
+    {
+        int iskai = GetComponent<BehaviorParameters>().TeamId == 0 ? 1 : 0;
+
+        cubeEntity.SetEnvID(FootballEnvController.GetCurrentEnviromentID(gameObject)); // Set the environment ID in the CubeEntity
+
+        SetTeamID((cubeEntity.GetEnvID() * 2 - iskai) + 1);
+    }
+
     public override void OnEpisodeBegin()
     {
-        ball.ResetPosition();
-        ball.transform.localPosition += new Vector3(UnityEngine.Random.Range(-1f, 1f), 0.1f, UnityEngine.Random.Range(-4f, 4f));
-
-        rigidBody.angularVelocity = Vector3.zero;
-        rigidBody.linearVelocity = Vector3.zero;
-
-        if (spawnPosition != null)
-            transform.localPosition = spawnPosition.localPosition;
-        else
-            transform.localPosition = cubeEntity.GetInitialPosition();
-
-        transform.localPosition += new Vector3(UnityEngine.Random.Range(-1f, 1f), 0.1f, UnityEngine.Random.Range(-3f, 3f));
-        transform.localRotation = Quaternion.Euler(0, UnityEngine.Random.Range(0f, 360f), 0);
-
-        ResetPosition(transform.localPosition);
-
         lastBallDistance = Vector3.Distance(transform.localPosition, ball.transform.localPosition);
         lastBallToGoalDistance = Vector3.Distance(ball.transform.localPosition, goalRegisterTarget.transform.localPosition);
         lastBallTouchTime = -10f;
     }
 
+    #endregion
+
+    #region ML-Agents Overrides
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(transform.localPosition);
@@ -100,8 +129,12 @@ public class FootballAgent : Agent, ICubeEntity
         sensor.AddObservation(cubeEntity.CanKick());
 
         sensor.AddObservation(GetAgentBallDotProduct());
-        sensor.AddObservation(ball.GetComponent<Rigidbody>().linearVelocity);
+        sensor.AddObservation(ballRigidBody.linearVelocity);
+        sensor.AddObservation(isCollidingWithBall);
+
         sensor.AddObservation(GetAgentGoalDotProduct());
+        // sensor.AddObservation(ball.GetComponent<Rigidbody>().linearVelocity);
+        // sensor.AddObservation(GetAgentGoalDotProduct());
     }
 
     public float GetAgentBallDotProduct()
@@ -159,7 +192,7 @@ public class FootballAgent : Agent, ICubeEntity
 
         // 1. Reward for approaching ball
         float currentBallDistance = Vector3.Distance(transform.localPosition, ball.transform.localPosition);
-        if (currentBallDistance < lastBallDistance)
+        if (currentBallDistance <= lastBallDistance)
         {
             AddReward(Rewards.ApproachBallReward);
         }
@@ -192,37 +225,37 @@ public class FootballAgent : Agent, ICubeEntity
         AddReward(Rewards.MovePenalty);
     }
 
-    private void HandleGoalScored(object Sender, Net.OnGoalScoredEventArgs e)
-    {
-        if (e.envID != cubeEntity.GetEnvID()) return;
+    // private void HandleGoalScored(object Sender, Net.OnGoalScoredEventArgs e)
+    // {
+    //     if (e.envID != cubeEntity.GetEnvID()) return;
 
-        if (e.netID == netTarget.GetNetID())
-        {
-            AddReward(Rewards.GoalScoredReward);
-            statsRecorder.Add($"Football/{name}/GoalsScored", 1, StatAggregationMethod.Sum);
-        }
-        else
-        {
-            AddReward(Rewards.GoalConcededPenalty);
-        }
+    //     if (e.netID == netTarget.GetNetID())
+    //     {
+    //         AddReward(Rewards.GoalScoredReward);
+    //         statsRecorder.Add($"Football/{name}/GoalsScored", 1, StatAggregationMethod.Sum);
+    //     }
+    //     else
+    //     {
+    //         AddReward(Rewards.GoalConcededPenalty);
+    //     }
 
-        iterationCount++;
-        OnEpisodeEnd?.Invoke(this, new OnEpisodeEndEventArgs
-        {
-            envID = cubeEntity.GetEnvID(),
-            iterationCount = iterationCount
-        });
+    //     iterationCount++;
+    //     OnEpisodeEnd?.Invoke(this, new OnEpisodeEndEventArgs
+    //     {
+    //         envID = cubeEntity.GetEnvID(),
+    //         iterationCount = iterationCount
+    //     });
 
-        EndEpisode();
-    }
+    //     EndEpisode();
+    // }
 
-    private void HandleTimeLimitReached(object sender, TimeScreen.OnTimeLimitReachedEventArgs e)
-    {
-        if (e.envID != cubeEntity.GetEnvID()) return;
-        AddReward(Rewards.TimeLimitPenalty);
-        iterationCount++;
-        EndEpisode();
-    }
+    // private void HandleTimeLimitReached(object sender, TimeScreen.OnTimeLimitReachedEventArgs e)
+    // {
+    //     if (e.envID != cubeEntity.GetEnvID()) return;
+    //     AddReward(Rewards.TimeLimitPenalty);
+    //     iterationCount++;
+    //     EndEpisode();
+    // }
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
@@ -251,14 +284,59 @@ public class FootballAgent : Agent, ICubeEntity
                 break;
         }
     }
+    #endregion
 
+    #region Helper Methods
+    public float GetAgentBallDotProduct()
+    {
+        Vector3 directionToBall = (ball.transform.localPosition - transform.localPosition).normalized;
+        return Vector3.Dot(transform.forward, directionToBall);
+    }
+
+    private float GetAgentGoalDotProduct()
+    {
+        Vector3 directionToGoal = (goalRegisterTarget.transform.localPosition - transform.localPosition).normalized;
+        return Vector3.Dot(transform.forward, directionToGoal);
+    }
+    #endregion
+
+    #region Event listeners
+    public void HandleGoalScored(Net.OnGoalScoredEventArgs e)
+    {
+        if (e.envID != cubeEntity.GetEnvID()) return;
+
+        if (e.TeamScored == team)
+        {
+            AddReward(Rewards.GoalScoredReward);
+            statsRecorder.Add($"Football/{name}/GoalsScored", 1, StatAggregationMethod.Sum);
+            statsRecorder.Add($"Rewards/{name}/GoalScoredReward", Rewards.GoalScoredReward, StatAggregationMethod.Sum);
+        }
+        else
+        {
+            AddReward(Rewards.GoalConcededPenalty);
+            statsRecorder.Add($"Rewards/{name}/GoalConcededPenalty", Rewards.GoalConcededPenalty, StatAggregationMethod.Sum);
+        }
+
+        EndEpisode();
+    }
+    #endregion
+
+    #region Collision Handlers
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.contacts[0].normal.y > 0.5f)
         {
             isGrounded = true;
         }
+        if (collision.gameObject.CompareTag("Ball"))
+        {
+            isCollidingWithBall = true;
+            stepsControllingBall = 0f;
+        }
+    }
 
+    private void OnCollisionExit(Collision collision)
+    {
         if (collision.gameObject.CompareTag("Ball"))
         {
             if (Time.time - lastBallTouchTime > ballTouchCooldown)
@@ -269,26 +347,20 @@ public class FootballAgent : Agent, ICubeEntity
             }
         }
     }
+    #endregion
 
-    public void ResetPosition(Vector3 initialPosition)
-    {
-        cubeEntity.ResetPosition(initialPosition);
-    }
-
-    public float[] GetMovementAttributes() => new float[] { moveSpeed, rotationSpeed, jumpForce };
-
-    public ControlScheme GetControlScheme() => controlScheme;
-
-    public void SetControlScheme(ControlScheme newScheme) => controlScheme = newScheme;
-
-    public void SetMovementAttributes(float? moveSpeed = null, float? rotationSpeed = null, float? jumpForce = null)
-    {
-        if (moveSpeed.HasValue) this.moveSpeed = moveSpeed.Value;
-        if (rotationSpeed.HasValue) this.rotationSpeed = rotationSpeed.Value;
-        if (jumpForce.HasValue) this.jumpForce = jumpForce.Value;
-    }
+    #region Utility Methods
 
     public Vector3 GetInitialPosition() => cubeEntity.GetInitialPosition();
 
+    public void SetTeamID(int teamID) => GetComponent<BehaviorParameters>().TeamId = teamID;
+
+    public int GetTeamID() => GetComponent<BehaviorParameters>().TeamId;
+
+    public void SetTeam(Team team) => this.team = team;
+
+    public Team GetTeam() => team;
+
     public GameObject GetGameObject() => gameObject;
+    #endregion
 }

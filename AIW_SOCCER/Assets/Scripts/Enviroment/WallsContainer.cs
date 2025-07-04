@@ -10,6 +10,10 @@ public class WallsContainer : MonoBehaviour
     [SerializeField] private GameObject rightWall;
     [SerializeField] private GameObject ceiling;
     [SerializeField] private GameObject floor; // Optional, if you want to include a floor
+    
+    [Header("Net References")]
+    [SerializeField] private GameObject OrangeNet;
+    [SerializeField] private GameObject BlueNet;
 
     [Header("Corner Bumps")]
     [SerializeField] private GameObject bumpTopLeft;
@@ -181,6 +185,22 @@ public class WallsContainer : MonoBehaviour
                 floorHeight,
                 width / 2f);
             bumpTopRight.transform.localScale = new Vector3(1f, height, 1f);
+        }
+
+        if (OrangeNet)
+        {
+            OrangeNet.transform.localPosition = new Vector3(
+                (depth / 2f) - 2.2f, 
+                floorHeight,
+                0);
+        }
+
+        if (BlueNet)
+        {
+            BlueNet.transform.localPosition = new Vector3(
+                (-depth / 2f) + 2.2f,
+                floorHeight, 
+                0);
         }
     }
 }

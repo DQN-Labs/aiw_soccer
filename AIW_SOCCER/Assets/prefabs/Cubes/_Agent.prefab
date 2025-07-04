@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7510710737168129603, guid: 93b7f36c4f8889643b5e1a32433ea75d, type: 3}
+      propertyPath: dashForce
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 5742017450019580593, guid: 93b7f36c4f8889643b5e1a32433ea75d, type: 3}
@@ -149,7 +153,6 @@ MonoBehaviour:
   jumpForce: 8
   ball: {fileID: 0}
   netTarget: {fileID: 0}
-  spawnPosition: {fileID: 0}
 --- !u!114 &6842121705226535815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,7 +193,7 @@ MonoBehaviour:
   m_RaysPerDirection: 20
   m_MaxRayDegrees: 50
   m_SphereCastRadius: 0.1
-  m_RayLength: 50
+  m_RayLength: 100
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 4294967227
@@ -226,7 +229,7 @@ MonoBehaviour:
   m_RaysPerDirection: 14
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0
-  m_RayLength: 20
+  m_RayLength: 50
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 4294967227
@@ -256,7 +259,7 @@ MonoBehaviour:
   m_RaysPerDirection: 20
   m_MaxRayDegrees: 50
   m_SphereCastRadius: 0.1
-  m_RayLength: 57
+  m_RayLength: 100
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 4294967240

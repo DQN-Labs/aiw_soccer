@@ -46,7 +46,7 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
 
     public void Start()
     {
-        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
+
     }
 
     void FixedUpdate()
@@ -208,5 +208,10 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
     public int GetEnvID()
     {
         return envID; // Return the environment ID
+    }
+
+    public void SetEnvID(int newEnvID)
+    {
+        envID = newEnvID; // Set the environment ID
     }
 }
