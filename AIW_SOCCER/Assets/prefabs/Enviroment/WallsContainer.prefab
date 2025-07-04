@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2099597442045766089}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 25, z: -50.05}
+  m_LocalPosition: {x: 0, y: 25, z: 50.05}
   m_LocalScale: {x: 126, y: 50, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -136,7 +136,7 @@ Transform:
   m_GameObject: {fileID: 3477367220798748115}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 25, z: 50.05}
+  m_LocalPosition: {x: 0, y: 25, z: -50.05}
   m_LocalScale: {x: 126, y: 50, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -483,10 +483,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backWall: {fileID: 5733618763642528181}
   frontWall: {fileID: 8175007603518363672}
-  rightWall: {fileID: 3477367220798748115}
-  leftWall: {fileID: 2099597442045766089}
+  leftWall: {fileID: 3477367220798748115}
+  rightWall: {fileID: 2099597442045766089}
   ceiling: {fileID: 7283066572156341308}
   floor: {fileID: 0}
+  bumpTopLeft: {fileID: 0}
+  bumpTopRight: {fileID: 0}
+  bumpBottomLeft: {fileID: 0}
+  bumpBottomRight: {fileID: 0}
   width: 100
   depth: 126
   height: 50

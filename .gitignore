@@ -96,3 +96,4 @@ venv/
 3.19.0
 AIW_SOCCER/UserSettings/EditorUserSettings.asset
 AIW_SOCCER/UserSettings/Layouts/default-6000.dwlt
+*.meta

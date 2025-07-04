@@ -1,197 +1,199 @@
-using UnityEngine;
+#region Using Directives
+using NUnit;
+using System;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Policies;
 using Unity.MLAgents.Sensors;
-using UnityEngine.Assertions.Must;
-using System;
+using Unity.VisualScripting.FullSerializer;
+using UnityEngine;
+#endregion
 
+#region Rewards Constants
 
-// Rewards Constants
-public static class Rewards
+public struct Rewards
 {
-    public const float MovePenalty = -0.0005f; // Penalty for each action taken
-    public const float GoalScoredReward = 10.0f; // Reward for scoring a goal
-    public const float GoalConcededPenalty = -10.0f; // Penalty for conceding a goal
-    public const float TimeLimitPenalty = -1.0f; // Penalty for time limit reached
+    public const float GoalScoredReward = 1.0f;
+    public const float GoalConcededPenalty = -1.0f;
+
+    public const float TimeLimitPenalty = -0.5f;
+    public const float MovePenalty = -0.0001f;
+
+    public const float ApproachBallReward = 0.0001f;
+    public const float BallMovingTowardGoal = 0.002f;
+    public const float BallTouchReward = 0.0005f;
+
+    public const float kickPenalty = -0.005f;
+    public const float dashPenalty = -0.002f;
+    public const float jumpPenalty = -0.002f;
 }
+#endregion
 
-public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
+public class FootballAgent : Agent
 {
+    #region Serialized Fields
     [Header("Movement Attributes")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private float jumpForce;
+    private ControlScheme controlScheme;
 
     [Header("References")]
     [SerializeField] private Ball ball;
     [SerializeField] private Net netTarget;
-    [SerializeField] private Transform spawnPosition; // This is not necessary
+    #endregion
 
-    private Vector3 initialPosition;
+    #region Private Fields
     private GoalRegister goalRegisterTarget;
-    private ControlScheme controlScheme;
-
-    private Rigidbody rigidBody;
-    private bool isGrounded;
-
     private CubeEntity cubeEntity;
+    private Rigidbody rigidBody;
+    private Rigidbody ballRigidBody;
+    private bool isGrounded;
+    private bool isCollidingWithBall = false;
+    private float stepsControllingBall = 0f;
+    private float lastBallDistance = -10f;
+    private StatsRecorder statsRecorder;
+    #endregion
 
-    private int iterationCount = 0; // Counter for the number of iterations
+    public Team team;
 
-    public static event EventHandler<OnEpisodeEndEventArgs> OnEpisodeEnd; // Event to notify when the episode ends
-
-    public class OnEpisodeEndEventArgs : EventArgs
-    {
-        public int envID = 0; // This can be used to identify the environment if needed
-        public int iterationCount = 0;
-    }
-
+    #region Unity Lifecycle
     public override void Initialize()
     {
         rigidBody = GetComponent<Rigidbody>();
         cubeEntity = GetComponent<CubeEntity>();
-        initialPosition = cubeEntity.GetInitialPosition(); // Get the initial position from the CubeEntity
+        ballRigidBody = ball.GetComponent<Rigidbody>();
         goalRegisterTarget = netTarget.GetComponentInChildren<GoalRegister>();
 
-        Net.OnGoalScored += HandleGoalScored; // Subscribe to goal scored event
-        TimeScreen.OnTimeLimitReached += HandleTimeLimitReached; // Subscribe to time limit reached event
-        controlScheme = GetComponent<CubeEntity>().GetControlScheme(); // Default control scheme
+        controlScheme = cubeEntity.GetControlScheme();
+
+        isGrounded = true;
+        lastBallDistance = Vector3.Distance(transform.localPosition, ball.transform.localPosition);
+
+        statsRecorder = Academy.Instance.StatsRecorder;
+    }
+
+    private void Start()
+    {
+        int iskai = GetComponent<BehaviorParameters>().TeamId == 0 ? 1 : 0;
+
+        cubeEntity.SetEnvID(FootballEnvController.GetCurrentEnviromentID(gameObject)); // Set the environment ID in the CubeEntity
+
+        SetTeamID((cubeEntity.GetEnvID() * 2 - iskai) + 1);
     }
 
     public override void OnEpisodeBegin()
     {
-        rigidBody.linearVelocity = Vector3.zero;
-        rigidBody.angularVelocity = Vector3.zero;
-
-        if (spawnPosition != null) transform.localPosition = spawnPosition.localPosition; // Use the spawn position if available
-        else cubeEntity.ResetPosition(cubeEntity.GetInitialPosition()); // Use the initial position
-
-        // Add randomness to the spawn position within a range
-        transform.localPosition += new Vector3(UnityEngine.Random.Range(-2f, 2f), 0.0f, UnityEngine.Random.Range(-2f, 2f));
-        transform.localRotation = Quaternion.Euler(0, UnityEngine.Random.Range(0f, 360f), 0);
-
-        ball.ResetPosition(); // Reset the ball position back to the starting position
-        ball.transform.localPosition += new Vector3(UnityEngine.Random.Range(-1f, 1f), 0.0f, UnityEngine.Random.Range(-1f, 1f));
+        lastBallDistance = Vector3.Distance(transform.localPosition, ball.transform.localPosition);
     }
 
+    #endregion
+
+    #region ML-Agents Overrides
     public override void CollectObservations(VectorSensor sensor)
     {
-        // Self observations
-        sensor.AddObservation(transform.localPosition); // 3
-        sensor.AddObservation(rigidBody.linearVelocity); // 3
-        sensor.AddObservation(isGrounded ? 1f : 0f); // 1
-        sensor.AddObservation(cubeEntity.CanDash()); // 1 
-        sensor.AddObservation(cubeEntity.CanKick()); // 1
+        sensor.AddObservation(transform.localPosition);
+        sensor.AddObservation(rigidBody.linearVelocity);
+        sensor.AddObservation(isGrounded ? 1f : 0f);
+        sensor.AddObservation(cubeEntity.CanDash());
+        sensor.AddObservation(cubeEntity.CanKick());
 
-        // Ball
-        sensor.AddObservation(GetAgentBallDotProduct()); // 1
-        sensor.AddObservation(ball.GetComponent<Rigidbody>().linearVelocity); // 3
+        sensor.AddObservation(GetAgentBallDotProduct());
+        sensor.AddObservation(ballRigidBody.linearVelocity);
+        sensor.AddObservation(isCollidingWithBall);
 
-        // Goal register position
-        sensor.AddObservation(GetAgentGoalDotProduct()); // 1
-    }
-
-    public float GetAgentBallDotProduct()
-    {
-        // Calculate the dot product between the agent's forward direction and the direction to the ball
-        Vector3 directionToBall = (ball.transform.localPosition - transform.localPosition).normalized;
-        return Vector3.Dot(transform.forward, directionToBall);
-    }
-
-    private float GetAgentGoalDotProduct()
-    {
-        // Calculate the dot product between the agent's forward direction and the direction to the goal
-        Vector3 directionToGoal = (goalRegisterTarget.transform.localPosition - transform.localPosition).normalized;
-        return Vector3.Dot(transform.forward, directionToGoal);
+        sensor.AddObservation(GetAgentGoalDotProduct());
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        // Action array: [move, rotate, jump, kick, dash]
-        int moveAction = actions.DiscreteActions[0];   // 0 = none, 1 = forward, 2 = backward
-        int rotateAction = actions.DiscreteActions[1]; // 0 = none, 1 = left, 2 = right
-        int jumpAction = actions.DiscreteActions[2];   // 0 = no jump, 1 = jump
-        int kickAction = actions.DiscreteActions[3];   // 0 = none, 1 = kick,
-        int dashAction = actions.DiscreteActions[4];   // 0 = none, 1 = dash
+        int moveAction = actions.DiscreteActions[0];
+        int rotateAction = actions.DiscreteActions[1];
+        int jumpAction = actions.DiscreteActions[2];
+        int kickAction = actions.DiscreteActions[3];
+        int dashAction = actions.DiscreteActions[4];
 
-
-        // Movement
         Vector3 moveDir = Vector3.zero;
-
-        if (moveAction == 1)
-            moveDir = transform.forward;
-        else if (moveAction == 2)
-            moveDir = -transform.forward;
+        if (moveAction == 1) moveDir = transform.forward;
+        else if (moveAction == 2) moveDir = -transform.forward;
 
         Vector3 desiredVelocity = moveDir * moveSpeed;
         rigidBody.linearVelocity = new Vector3(desiredVelocity.x, rigidBody.linearVelocity.y, desiredVelocity.z);
 
-        // Rotation
         if (rotateAction == 1)
-            rigidBody.angularVelocity = new Vector3(0f, -rotationSpeed * Mathf.Deg2Rad, 0f); // convert to rad/s
+            rigidBody.angularVelocity = new Vector3(0f, -rotationSpeed * Mathf.Deg2Rad, 0f);
         else if (rotateAction == 2)
             rigidBody.angularVelocity = new Vector3(0f, rotationSpeed * Mathf.Deg2Rad, 0f);
         else
             rigidBody.angularVelocity = Vector3.zero;
 
-
-        // Jumping
         if (jumpAction == 1 && isGrounded)
         {
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
+            AddReward(Rewards.jumpPenalty);
+            statsRecorder.Add($"Rewards/{name}/jumpPenalty", Rewards.jumpPenalty, StatAggregationMethod.Sum);
         }
 
-        // Kicking
         if (kickAction == 1 && cubeEntity.CanKick())
         {
             cubeEntity.BKick();
+            AddReward(Rewards.kickPenalty);
+            statsRecorder.Add($"Football/{name}/KicksAttempted", 1f, StatAggregationMethod.Sum);
+            statsRecorder.Add($"Rewards/{name}/kickPenalty", Rewards.kickPenalty, StatAggregationMethod.Sum);
         }
 
-        // Dashing
         if (dashAction == 1 && cubeEntity.CanDash())
         {
             cubeEntity.StartDash();
+            AddReward(Rewards.dashPenalty);
+            statsRecorder.Add($"Rewards/{name}/DashPenalty", Rewards.dashPenalty, StatAggregationMethod.Sum);
+        }
+
+        // 1. Reward for approaching ball
+        float currentBallDistance = Vector3.Distance(transform.localPosition, ball.transform.localPosition);
+        if (currentBallDistance <= lastBallDistance)
+        {
+            AddReward(Rewards.ApproachBallReward);
+            statsRecorder.Add($"Rewards/{name}/ApproachBallReward", Rewards.ApproachBallReward, StatAggregationMethod.Sum);
+        }
+        lastBallDistance = currentBallDistance;
+
+
+        // 2. BallMovingTowardGoalReward
+        Vector3 ballVelocity = ballRigidBody.linearVelocity;
+        if (ballVelocity.sqrMagnitude > 0.01f)
+        {
+            Vector3 directionToGoal = (goalRegisterTarget.transform.localPosition - ball.transform.localPosition).normalized;
+            float dot = Vector3.Dot(ballVelocity.normalized, directionToGoal);
+
+            if (dot > 0.5f)
+            {
+
+                float velocity = ballVelocity.magnitude;
+                if (velocity > 5f) velocity = 5f; // Sometimes this equals the ball kick power (30), but we dont want that
+
+                AddReward(Rewards.BallMovingTowardGoal * dot * (velocity / 5f));
+                statsRecorder.Add($"Rewards/{name}/BallMovingTowardGoal", Rewards.BallMovingTowardGoal * dot * (velocity / 5f), StatAggregationMethod.Sum);
+                statsRecorder.Add($"Football/{name}/ProductiveShotPower", velocity, StatAggregationMethod.Histogram);
+            }
+        }
+
+        // --- Add BallTouchReward for every step in collision with the ball ---
+        if (isCollidingWithBall)
+        {
+            AddReward(Rewards.BallTouchReward);
+            statsRecorder.Add($"Rewards/{name}/BallTouchReward", Rewards.BallTouchReward, StatAggregationMethod.Sum);
+            stepsControllingBall += 1f;
         }
 
         AddReward(Rewards.MovePenalty);
-    }
-
-    private void HandleGoalScored(object Sender, Net.OnGoalScoredEventArgs e)
-    {
-        if (e.envID != cubeEntity.GetEnvID()) return; // Check if the event is for the current environment
-
-        if (e.netID == netTarget.GetNetID()) AddReward(Rewards.GoalScoredReward); // Add reward if the goal was scored in the agent's target net
-        else AddReward(Rewards.GoalConcededPenalty); // Add penalty if the goal was scored in the agent's net
-
-        //Debug.Log($"Goal scored: Reward for {gameObject.name}: {GetCumulativeReward()}");
-        iterationCount++;
-        OnEpisodeEnd?.Invoke(this, new OnEpisodeEndEventArgs {
-            envID = cubeEntity.GetEnvID(), // This can be used to identify the environment if needed
-            iterationCount = iterationCount
-        }); // Notify subscribers that the episode has ended
-
-        cubeEntity.ResetPosition(cubeEntity.GetInitialPosition());
-        EndEpisode();
-    }
-
-    private void HandleTimeLimitReached(object sender, TimeScreen.OnTimeLimitReachedEventArgs e)
-    {
-        if (e.envID != cubeEntity.GetEnvID()) return;
-      
-        //Debug.Log($"Time limit reached for {gameObject.name}. Ending episode.");
-        AddReward(Rewards.TimeLimitPenalty); // Penalty for time limit reached
-        iterationCount++;
-
-        // The episode end event is triggered by the TimeScreen, so we don't need to call it here
-        cubeEntity.ResetPosition(cubeEntity.GetInitialPosition());
-        EndEpisode();
-        
+        statsRecorder.Add($"Rewards/{name}/MovePenalty", Rewards.MovePenalty, StatAggregationMethod.Sum);
+        statsRecorder.Add($"Football/steps_per_episode", 1f, StatAggregationMethod.Sum);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        // Action array: [move, rotate, jump, kick, dash]
         var discreteActions = actionsOut.DiscreteActions;
 
         switch (controlScheme)
@@ -208,72 +210,86 @@ public class FootballAgent : Unity.MLAgents.Agent, ICubeEntity
                 discreteActions[4] = Input.GetKey(KeyCode.LeftShift) ? 1 : 0;
                 break;
 
-            
-
             case ControlScheme.IJKL_Shift:
-                discreteActions[0] = Input.GetKey(KeyCode.I) ? 1 :
-                                     Input.GetKey(KeyCode.K) ? 2 : 0;
-
-                discreteActions[1] = Input.GetKey(KeyCode.J) ? 1 :
-                                     Input.GetKey(KeyCode.L) ? 2 : 0;
-
+                discreteActions[0] = Input.GetKey(KeyCode.I) ? 1 : Input.GetKey(KeyCode.K) ? 2 : 0;
+                discreteActions[1] = Input.GetKey(KeyCode.J) ? 1 : Input.GetKey(KeyCode.L) ? 2 : 0;
                 discreteActions[2] = Input.GetKey(KeyCode.RightShift) ? 1 : 0;
                 discreteActions[3] = Input.GetKey(KeyCode.H) ? 1 : 0;
                 discreteActions[4] = Input.GetKey(KeyCode.B) ? 1 : 0;
                 break;
         }
     }
+    #endregion
 
-    void OnCollisionEnter(Collision collision)
+    #region Helper Methods
+    public float GetAgentBallDotProduct()
+    {
+        Vector3 directionToBall = (ball.transform.localPosition - transform.localPosition).normalized;
+        return Vector3.Dot(transform.forward, directionToBall);
+    }
+
+    private float GetAgentGoalDotProduct()
+    {
+        Vector3 directionToGoal = (goalRegisterTarget.transform.localPosition - transform.localPosition).normalized;
+        return Vector3.Dot(transform.forward, directionToGoal);
+    }
+    #endregion
+
+    #region Event listeners
+    public void HandleGoalScored(Net.OnGoalScoredEventArgs e)
+    {
+        if (e.envID != cubeEntity.GetEnvID()) return;
+
+        if (e.TeamScored == team)
+        {
+            AddReward(Rewards.GoalScoredReward);
+            statsRecorder.Add($"Football/{name}/GoalsScored", 1, StatAggregationMethod.Sum);
+            statsRecorder.Add($"Rewards/{name}/GoalScoredReward", Rewards.GoalScoredReward, StatAggregationMethod.Sum);
+        }
+        else
+        {
+            AddReward(Rewards.GoalConcededPenalty);
+            statsRecorder.Add($"Rewards/{name}/GoalConcededPenalty", Rewards.GoalConcededPenalty, StatAggregationMethod.Sum);
+        }
+
+        EndEpisode();
+    }
+    #endregion
+
+    #region Collision Handlers
+    private void OnCollisionEnter(Collision collision)
     {
         if (collision.contacts[0].normal.y > 0.5f)
         {
             isGrounded = true;
         }
-        // if (collision.gameObject.CompareTag("Ball"))
-        // {
-        // AddReward(0.5f); // touching the ball is a good thing
-        // }
-        // if (collision.gameObject.CompareTag("Barrier"))
-        // {
-        //     AddReward(-0.1f);
-        // }
+        if (collision.gameObject.CompareTag("Ball"))
+        {
+            isCollidingWithBall = true;
+            stepsControllingBall = 0f;
+        }
     }
 
-    public void ResetPosition(Vector3 initialPosition)
+    private void OnCollisionExit(Collision collision)
     {
-        transform.localPosition = spawnPosition.localPosition;
+        if (collision.gameObject.CompareTag("Ball"))
+        {
+            isCollidingWithBall = false;
+            statsRecorder.Add($"Football/{name}/StepsTouchingBall", stepsControllingBall, StatAggregationMethod.Sum);
+        }
     }
+    #endregion
 
-    public float[] GetMovementAttributes()
-    {
-        return new float[] { moveSpeed, rotationSpeed, jumpForce };
-    }
+    #region Utility Methods
 
-    public ControlScheme GetControlScheme()
-    {
-        return controlScheme;
-    }
+    public Vector3 GetInitialPosition() => cubeEntity.GetInitialPosition();
 
-    public void SetControlScheme(ControlScheme newScheme)
-    {
-        controlScheme = newScheme;
-    }
+    public void SetTeamID(int teamID) => GetComponent<BehaviorParameters>().TeamId = teamID;
 
-    public void SetMovementAttributes(float? moveSpeed = null, float? rotationSpeed = null, float? jumpForce = null)
-    {
-        if (moveSpeed.HasValue) this.moveSpeed = moveSpeed.Value;
-        if (rotationSpeed.HasValue) this.rotationSpeed = rotationSpeed.Value;
-        if (jumpForce.HasValue) this.jumpForce = jumpForce.Value;
-    }
+    public int GetTeamID() => GetComponent<BehaviorParameters>().TeamId;
 
-    public Vector3 GetInitialPosition()
-    {
-        return cubeEntity.GetInitialPosition();
-    }
+    public void SetTeam(Team team) => this.team = team;
 
-    public GameObject GetGameObject()
-    {
-        return gameObject;
-    }
+    public Team GetTeam() => team;
+    #endregion
 }

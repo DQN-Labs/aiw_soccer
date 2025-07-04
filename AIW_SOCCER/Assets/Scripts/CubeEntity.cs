@@ -42,8 +42,11 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
     {
         initialPosition = transform.localPosition;
         rigidBody = GetComponent<Rigidbody>();
+    }
 
-        envID = Enviroment.GetCurrentEnviromentID(gameObject); // Get the environment ID from the parent Enviroment component
+    public void Start()
+    {
+
     }
 
     void FixedUpdate()
@@ -178,9 +181,14 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
 
     public void ResetPosition(Vector3 initialPosition)
     {
-        transform.localPosition = initialPosition;
-        //transform.rotation = Quaternion.Euler(0, -90, 0);
         rigidBody.linearVelocity = Vector3.zero;
+        rigidBody.angularVelocity = Vector3.zero;
+
+        transform.localPosition = initialPosition;
+
+        rigidBody.position = transform.position; 
+        rigidBody.rotation = transform.rotation; 
+
     }
     public Rigidbody GetRigidbody()
     {
@@ -200,5 +208,10 @@ public class CubeEntity : MonoBehaviour, ICubeEntity
     public int GetEnvID()
     {
         return envID; // Return the environment ID
+    }
+
+    public void SetEnvID(int newEnvID)
+    {
+        envID = newEnvID; // Set the environment ID
     }
 }
