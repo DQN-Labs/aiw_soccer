@@ -139,7 +139,7 @@ PrefabInstance:
     - target: {fileID: 3420898756754213327, guid: 0c695f2e2b38532499dded9e28191bb9, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: a69ef504ec6c4462ba5b7a478e4894c6, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 033a3584c39684c18a3192594960123a, type: 3}
     - target: {fileID: 3420898756754213327, guid: 0c695f2e2b38532499dded9e28191bb9, type: 3}
       propertyPath: m_BehaviorType
       value: 0
@@ -1191,7 +1191,7 @@ PrefabInstance:
     - target: {fileID: 4324364196085126069, guid: c5855269a815faf4881b5b9c3a8fe90e, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: a69ef504ec6c4462ba5b7a478e4894c6, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 033a3584c39684c18a3192594960123a, type: 3}
     - target: {fileID: 4324364196085126069, guid: c5855269a815faf4881b5b9c3a8fe90e, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
       value: 14
@@ -1303,7 +1303,7 @@ PrefabInstance:
     - target: {fileID: 6633830292107475013, guid: c5855269a815faf4881b5b9c3a8fe90e, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: a69ef504ec6c4462ba5b7a478e4894c6, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 9a64e082cc8ad4e2697a426e2cceee90, type: 3}
     - target: {fileID: 6633830292107475013, guid: c5855269a815faf4881b5b9c3a8fe90e, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
       value: 14
@@ -3211,7 +3211,7 @@ PrefabInstance:
     - target: {fileID: 7406723772636373253, guid: 9900ab91d78f8cf45944ff7a5b1dc65c, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: a69ef504ec6c4462ba5b7a478e4894c6, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 9a64e082cc8ad4e2697a426e2cceee90, type: 3}
     - target: {fileID: 7406723772636373253, guid: 9900ab91d78f8cf45944ff7a5b1dc65c, type: 3}
       propertyPath: m_BehaviorType
       value: 0
