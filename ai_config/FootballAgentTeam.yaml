@@ -1,20 +1,20 @@
 behaviors:
   Albert_FootballAgent:
-    trainer_type: poca
+    trainer_type: ppo
     hyperparameters:
-      batch_size: 1024
-      buffer_size: 10240
-      learning_rate: 3.0e-4
-      learning_rate_schedule: constant
+      batch_size: 2048
+      buffer_size: 24576 # Bigger buffer size for more stable training
+      learning_rate: 3.0e-3
+      learning_rate_schedule: linear
 
-      beta: 1.0e-2
+      beta: 4.0e-2
       beta_schedule: linear    # Schedule to reduce exploration over time
 
       epsilon: 0.2
       epsilon_schedule: linear
 
-      lambd: 0.95
-      num_epoch: 3
+      lambd: 0.95 
+      num_epoch: 4
     
     network_settings:
       normalize: false
@@ -23,29 +23,30 @@ behaviors:
     
     reward_signals:
       extrinsic:
-        gamma: 0.99
+        gamma: 0.995
         strength: 1.0
     
-    max_steps: 15000000
-    time_horizon: 1024
+    max_steps: 50000000
+    time_horizon: 2048
+    threaded: True
     summary_freq: 25000
     
   Kai_FootballAgent:
-    trainer_type: poca
+    trainer_type: ppo
     hyperparameters:
-      batch_size: 1024
-      buffer_size: 10240
-      learning_rate: 3.0e-4
-      learning_rate_schedule: constant
+      batch_size: 2048
+      buffer_size: 24576 # Bigger buffer size for more stable training
+      learning_rate: 3.0e-3
+      learning_rate_schedule: linear
 
-      beta: 1.0e-2
+      beta: 4.0e-2
       beta_schedule: linear    # Schedule to reduce exploration over time
 
       epsilon: 0.2
       epsilon_schedule: linear
 
-      lambd: 0.95
-      num_epoch: 3
+      lambd: 0.95 
+      num_epoch: 4
     
     network_settings:
       normalize: false
@@ -54,9 +55,10 @@ behaviors:
     
     reward_signals:
       extrinsic:
-        gamma: 0.99
+        gamma: 0.995
         strength: 1.0
     
-    max_steps: 15000000
-    time_horizon: 1024
+    max_steps: 50000000
+    time_horizon: 2048
+    threaded: True
     summary_freq: 25000
