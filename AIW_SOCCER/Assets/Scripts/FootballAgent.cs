@@ -5,39 +5,27 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Policies;
 using Unity.MLAgents.Sensors;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 #endregion
 
 #region Rewards Constants
-
-public struct Rewards {
-    public const float GoalScoredReward = 1.0f;
-    public const float GoalConcededPenalty = -1.0f;
+public struct Rewards
+{
+    public const float GoalScoredReward = 5.0f;
+    public const float GoalConcededPenalty = -5.0f;
 
     public const float TimeLimitPenalty = -0.5f;
-    public const float MovePenalty = -0.0001f;
+    public const float MovePenalty = -0.001f;
 
-    public const float ApproachBallReward = 0.0001f;
-    public const float BallMovingTowardGoal = 0.002f;
-    public const float BallTouchReward = 0.0005f;
+    public const float ApproachBallReward = 0.0f; // Removed constant approach reward
+    public const float BallCloserToAgentRewardScale = 0.001f; // dynamic
+    public const float BallProgressTowardGoalRewardScale = 0.01f;
 
-    public const float kickPenalty = -0.005f;
-    public const float dashPenalty = -0.002f;
-    public const float jumpPenalty = -0.002f;
-// using System;
+    public const float KickPenalty = -0.005f;
+    public const float DashPenalty = -0.002f;
+    public const float JumpPenalty = -0.002f;
 
-// public static class Rewards
-// {
-//     public const float GoalScoredReward = 10.0f;
-//     public const float GoalConcededPenalty = -10.0f;
-//     public const float TimeLimitPenalty = -5f;
-//     public const float MovePenalty = -0.0001f;
-//     public const float ApproachBallReward = 0.0002f;
-//     public const float BallMovingTowardGoal = 0.05f;
-//     public const float BallTouchReward = 0.05f;
-//     public const float kickPenalty = -0.01f;
-//     public const float dashPenalty = -0.01f;
+    public const float FarFromBallPenalty = -0.0005f;
 }
 #endregion
 
@@ -62,23 +50,10 @@ public class FootballAgent : Agent
     private Rigidbody ballRigidBody;
     private bool isGrounded;
     private bool isCollidingWithBall = false;
-    private float stepsControllingBall = 0f;
+
     private float lastBallDistance = -10f;
-
-    // private int iterationCount = 0;
-
-    // public static event EventHandler<OnEpisodeEndEventArgs> OnEpisodeEnd;
-
-    // public class OnEpisodeEndEventArgs : EventArgs
-    // {
-    //     public int envID = 0;
-    //     public int iterationCount = 0;
-    // }
-
-    // private float lastBallDistance;
-    // private float lastBallToGoalDistance;
-    // private float lastBallTouchTime = -10f;
-    // private float ballTouchCooldown = 0.2f;
+    private Vector3 lastBallPosition;
+    private float stuckTimer = 0f;
 
     private StatsRecorder statsRecorder;
     #endregion
@@ -97,6 +72,7 @@ public class FootballAgent : Agent
 
         isGrounded = true;
         lastBallDistance = Vector3.Distance(transform.localPosition, ball.transform.localPosition);
+        lastBallPosition = ball.transform.localPosition;
 
         statsRecorder = Academy.Instance.StatsRecorder;
     }
@@ -105,18 +81,16 @@ public class FootballAgent : Agent
     {
         int iskai = GetComponent<BehaviorParameters>().TeamId == 0 ? 1 : 0;
 
-        cubeEntity.SetEnvID(FootballEnvController.GetCurrentEnviromentID(gameObject)); // Set the environment ID in the CubeEntity
-
+        cubeEntity.SetEnvID(FootballEnvController.GetCurrentEnviromentID(gameObject));
         SetTeamID((cubeEntity.GetEnvID() * 2 - iskai) + 1);
     }
 
     public override void OnEpisodeBegin()
     {
         lastBallDistance = Vector3.Distance(transform.localPosition, ball.transform.localPosition);
-        //lastBallToGoalDistance = Vector3.Distance(ball.transform.localPosition, goalRegisterTarget.transform.localPosition);
-        //lastBallTouchTime = -10f;
+        lastBallPosition = ball.transform.localPosition;
+        stuckTimer = 0f;
     }
-
     #endregion
 
     #region ML-Agents Overrides
@@ -133,8 +107,6 @@ public class FootballAgent : Agent
         sensor.AddObservation(isCollidingWithBall);
 
         sensor.AddObservation(GetAgentGoalDotProduct());
-        // sensor.AddObservation(ball.GetComponent<Rigidbody>().linearVelocity);
-        // sensor.AddObservation(GetAgentGoalDotProduct());
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -163,85 +135,67 @@ public class FootballAgent : Agent
         {
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
+            AddReward(Rewards.JumpPenalty);
         }
 
         if (kickAction == 1 && cubeEntity.CanKick())
         {
             cubeEntity.BKick();
-            AddReward(Rewards.kickPenalty);
+            AddReward(Rewards.KickPenalty);
             statsRecorder.Add($"Football/{name}/KicksAttempted", 1f, StatAggregationMethod.Sum);
         }
 
         if (dashAction == 1 && cubeEntity.CanDash())
         {
             cubeEntity.StartDash();
-            AddReward(Rewards.dashPenalty);
+            AddReward(Rewards.DashPenalty);
         }
 
-        // 1. Reward for approaching ball
+        // Reward ball getting closer to agent (encourages chasing)
         float currentBallDistance = Vector3.Distance(transform.localPosition, ball.transform.localPosition);
-        if (currentBallDistance <= lastBallDistance)
-        {
-            AddReward(Rewards.ApproachBallReward);
-        }
+        float distanceChange = lastBallDistance - currentBallDistance;
+        AddReward(distanceChange * Rewards.BallCloserToAgentRewardScale);
         lastBallDistance = currentBallDistance;
 
-        // 2. Reward if ball moves toward goal
-        Vector3 ballVelocity = ball.GetComponent<Rigidbody>().linearVelocity;
+        // Punish being very far from the ball
+        if (currentBallDistance > 15f)
+        {
+            AddReward(Rewards.FarFromBallPenalty);
+        }
+
+        // Reward if ball moves toward goal
+        Vector3 ballVelocity = ballRigidBody.linearVelocity;
         if (ballVelocity.magnitude > 0.1f)
         {
             Vector3 directionToGoal = (goalRegisterTarget.transform.localPosition - ball.transform.localPosition).normalized;
             float dot = Vector3.Dot(ballVelocity.normalized, directionToGoal);
 
-            if (dot > 0.5f)
+            if (dot > 0.3f)
             {
-                AddReward(Rewards.BallMovingTowardGoal * dot * (ballVelocity.magnitude / 4.5f));
+                AddReward(Rewards.BallProgressTowardGoalRewardScale * dot * (ballVelocity.magnitude / 5f));
                 statsRecorder.Add($"Football/{name}/ProductiveShotPower", ballVelocity.magnitude, StatAggregationMethod.Histogram);
             }
         }
 
-        // 3. NEW: Ball closer to goal reward (distance reducing version)
-        //float currentBallToGoalDistance = Vector3.Distance(ball.transform.localPosition, goalRegisterTarget.transform.localPosition);
-        //if (currentBallToGoalDistance < lastBallToGoalDistance)
-        //{
-        //    AddReward(0.005f);
-        //}
-        //lastBallToGoalDistance = currentBallToGoalDistance;
-
+        // Time penalty to discourage stalling
         AddReward(Rewards.MovePenalty);
+
+        // Stuck detection: if ball hasn't moved significantly for 3 seconds, end episode
+        if (Vector3.Distance(ball.transform.localPosition, lastBallPosition) < 0.5f)
+        {
+            stuckTimer += Time.fixedDeltaTime;
+            if (stuckTimer > 3f)
+            {
+                AddReward(Rewards.TimeLimitPenalty);
+                EndEpisode();
+            }
+        }
+        else
+        {
+            stuckTimer = 0f;
+            lastBallPosition = ball.transform.localPosition;
+        }
     }
-
-    // private void HandleGoalScored(object Sender, Net.OnGoalScoredEventArgs e)
-    // {
-    //     if (e.envID != cubeEntity.GetEnvID()) return;
-
-    //     if (e.netID == netTarget.GetNetID())
-    //     {
-    //         AddReward(Rewards.GoalScoredReward);
-    //         statsRecorder.Add($"Football/{name}/GoalsScored", 1, StatAggregationMethod.Sum);
-    //     }
-    //     else
-    //     {
-    //         AddReward(Rewards.GoalConcededPenalty);
-    //     }
-
-    //     iterationCount++;
-    //     OnEpisodeEnd?.Invoke(this, new OnEpisodeEndEventArgs
-    //     {
-    //         envID = cubeEntity.GetEnvID(),
-    //         iterationCount = iterationCount
-    //     });
-
-    //     EndEpisode();
-    // }
-
-    // private void HandleTimeLimitReached(object sender, TimeScreen.OnTimeLimitReachedEventArgs e)
-    // {
-    //     if (e.envID != cubeEntity.GetEnvID()) return;
-    //     AddReward(Rewards.TimeLimitPenalty);
-    //     iterationCount++;
-    //     EndEpisode();
-    // }
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
@@ -289,8 +243,7 @@ public class FootballAgent : Agent
     #region Event listeners
     public void HandleGoalScored(Net.OnGoalScoredEventArgs e)
     {
-        if (this == null) return; // stops calls on destroyed agents
-
+        if (this == null) return;
         if (e.envID != cubeEntity.GetEnvID()) return;
 
         if (e.TeamScored == team)
@@ -304,10 +257,12 @@ public class FootballAgent : Agent
             AddReward(Rewards.GoalConcededPenalty);
             statsRecorder.Add($"Rewards/{name}/GoalConcededPenalty", Rewards.GoalConcededPenalty, StatAggregationMethod.Sum);
         }
-    }    
+
+        EndEpisode();
+    }
     #endregion
 
-        #region Collision Handlers
+    #region Collision Handlers
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.contacts[0].normal.y > 0.5f)
@@ -317,40 +272,24 @@ public class FootballAgent : Agent
         if (collision.gameObject.CompareTag("Ball"))
         {
             isCollidingWithBall = true;
-            stepsControllingBall = 0f;
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        //if (collision.gameObject.CompareTag("Ball"))
-        //{
-        //    if (Time.time - lastBallTouchTime > ballTouchCooldown)
-        //    {
-        //        AddReward(Rewards.BallTouchReward);
-        //        lastBallTouchTime = Time.time;
-        //        statsRecorder.Add($"Football/{name}/BallTouches", 1f, StatAggregationMethod.Sum);
-        //    }
-        //}
-
-        statsRecorder.Add($"Football/{name}/stepsControllingBall", stepsControllingBall, StatAggregationMethod.Sum);
-        isCollidingWithBall = false;
-        stepsControllingBall = 0f;
+        if (collision.gameObject.CompareTag("Ball"))
+        {
+            isCollidingWithBall = false;
+        }
     }
     #endregion
 
     #region Utility Methods
-
     public Vector3 GetInitialPosition() => cubeEntity.GetInitialPosition();
-
     public void SetTeamID(int teamID) => GetComponent<BehaviorParameters>().TeamId = teamID;
-
     public int GetTeamID() => GetComponent<BehaviorParameters>().TeamId;
-
     public void SetTeam(Team team) => this.team = team;
-
     public Team GetTeam() => team;
-
     public GameObject GetGameObject() => gameObject;
     #endregion
 }

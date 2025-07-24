@@ -1688,7 +1688,11 @@ PrefabInstance:
     - target: {fileID: 625515532811800714, guid: d8690f1b8c7684a4fb260c462ef25d40, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 0cc2a41f9bb81a34e82775dfc77e0376, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 2c11cd576371f483f83ca2a1e6da3bce, type: 3}
+    - target: {fileID: 625515532811800714, guid: d8690f1b8c7684a4fb260c462ef25d40, type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 625515532811800714, guid: d8690f1b8c7684a4fb260c462ef25d40, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
       value: 15
@@ -1804,6 +1808,10 @@ PrefabInstance:
     - target: {fileID: 3754287891938111657, guid: d8690f1b8c7684a4fb260c462ef25d40, type: 3}
       propertyPath: m_LocalPosition.y
       value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4196985813217703136, guid: d8690f1b8c7684a4fb260c462ef25d40, type: 3}
+      propertyPath: team
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4366420120273994526, guid: d8690f1b8c7684a4fb260c462ef25d40, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2066,6 +2074,10 @@ PrefabInstance:
       propertyPath: ball
       value: 
       objectReference: {fileID: 1029026070}
+    - target: {fileID: 3767873073583959711, guid: 9900ab91d78f8cf45944ff7a5b1dc65c, type: 3}
+      propertyPath: team
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3767873073583959711, guid: 9900ab91d78f8cf45944ff7a5b1dc65c, type: 3}
       propertyPath: netTarget
       value: 
@@ -2724,7 +2736,7 @@ PrefabInstance:
     - target: {fileID: 3420898756754213327, guid: 0c695f2e2b38532499dded9e28191bb9, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 0cc2a41f9bb81a34e82775dfc77e0376, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 2c11cd576371f483f83ca2a1e6da3bce, type: 3}
     - target: {fileID: 3420898756754213327, guid: 0c695f2e2b38532499dded9e28191bb9, type: 3}
       propertyPath: m_BehaviorType
       value: 0
