@@ -532,8 +532,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skinPrefabs:
-  - {fileID: 919132149155446097, guid: 70f12399fd8623a48b1cf59e29e4e7fc, type: 3}
+  - {fileID: 919132149155446097, guid: d75bd44e4d39a7448a6399739323341a, type: 3}
   - {fileID: 919132149155446097, guid: 1d74e616fa48cb846964928b14cb123f, type: 3}
+  - {fileID: 919132149155446097, guid: 70f12399fd8623a48b1cf59e29e4e7fc, type: 3}
   modelHolder: {fileID: 2080981227}
 --- !u!1 &721117854
 GameObject:
