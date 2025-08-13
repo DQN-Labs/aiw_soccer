@@ -110,27 +110,26 @@ public class FootballEnvController : MonoBehaviour
     #region Public Methods
 
     public void ResetBall()
-{
-    if (ball == null)
     {
-        Debug.LogWarning("Ball has been destroyed; skipping ResetBall");
-        return;
+        if (ball == null)
+        {
+            Debug.LogWarning("Ball has been destroyed; skipping ResetBall");
+            return;
+        }
+
+        var randomPosX = UnityEngine.Random.Range(-2.5f, 2.5f);
+        var randomPosZ = UnityEngine.Random.Range(-2.5f, 2.5f);
+
+        if (ball.transform == null) return; // transform destroyed
+
+        ball.transform.position = m_BallStartingPos + new Vector3(randomPosX, 0f, randomPosZ);
+
+        if (ballRb != null)
+        {
+            ballRb.linearVelocity = Vector3.zero;
+            ballRb.angularVelocity = Vector3.zero;
+        }
     }
-
-    var randomPosX = UnityEngine.Random.Range(-2.5f, 2.5f);
-    var randomPosZ = UnityEngine.Random.Range(-2.5f, 2.5f);
-
-    if (ball.transform == null) return; // transform destroyed
-
-    ball.transform.position = m_BallStartingPos + new Vector3(randomPosX, 0f, randomPosZ);
-
-    if (ballRb != null)
-    {
-        ballRb.linearVelocity = Vector3.zero;
-        ballRb.angularVelocity = Vector3.zero;
-    }
-}
-
 
     public void IncrementIterationsCount()
     {

@@ -39,7 +39,7 @@ public class CameraSwitcher : MonoBehaviour
         CubeCamera cubeCam = cameras[currentCameraIndex].GetComponent<CubeCamera>();
         if (cubeCam != null && cubeCam.GetTargetObject() != null)
         {
-            cubeCam.SetCameraPosition(cubeCam.GetTargetObject().position);
+            cubeCam.SetCameraPositionStart(cubeCam.GetTargetObject().position);
         }
     }
 }
