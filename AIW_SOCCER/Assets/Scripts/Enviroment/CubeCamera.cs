@@ -6,7 +6,9 @@ public class CubeCamera : MonoBehaviour
 {
     [SerializeField] private Transform targetObject; // This should be a different type, not GameObject. It should work for both Player and Kai, maybe an Interface they both inherit from?.
     [SerializeField] private Vector3 offset;
+    [SerializeField] private Quaternion rotationOffset = Quaternion.identity;
     [SerializeField] private float followSpeed = 5f;
+    [SerializeField] private float initialFollowSpeed = 2f;
 
     void Start()
     {
@@ -15,17 +17,35 @@ public class CubeCamera : MonoBehaviour
 
     void LateUpdate()
     {
+        // Follow the target object with a specified offset
         if (targetObject != null)
         {
-            SetCameraPosition(targetObject.position);
+            Quaternion objectRotation = targetObject.rotation * rotationOffset;
+            Vector3 desiredPosition = targetObject.position + objectRotation * offset;
 
+            SetCameraPosition(desiredPosition);
+            SetCameraRotation(objectRotation);
         }
     }
 
-    public void SetCameraPosition(Vector3 playerPosition)
+    private void SetCameraRotation(Quaternion objectRotation)
     {
-        Vector3 desiredPosition = playerPosition + offset;
-        transform.position = Vector3.Lerp(transform.position, desiredPosition, followSpeed * Time.deltaTime);
+       transform.rotation = objectRotation;
+    }
+
+    public void SetCameraPositionStart(Vector3 desiredPosition)
+    {
+        transform.position = Vector3.Lerp(transform.position, desiredPosition, initialFollowSpeed * Time.deltaTime);
+    }
+
+    private void SetCameraPosition(Vector3 desiredPosition)
+    {
+        transform.position = desiredPosition;
+    }
+
+    private void SetCameraPosition(Vector3 desiredPosition, float followSpeed)
+    {
+       transform.position = Vector3.Lerp(transform.position, desiredPosition, followSpeed * Time.deltaTime);
     }
 
     public Vector3 GetOffset()
