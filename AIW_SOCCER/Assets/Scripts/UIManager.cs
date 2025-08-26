@@ -37,6 +37,11 @@ public class UIManager : MonoBehaviour
     {
         SceneManager.LoadScene(GameModeSelection);
     }
+    public void AddKaiGoal(int amount = 1)
+    {
+        GoalSaver.KaiGoals += amount;
+        GoalSaver.SaveScores();
+    }
     // Skin Selection
     public void SelectSkin(int skinIndex)
     {
