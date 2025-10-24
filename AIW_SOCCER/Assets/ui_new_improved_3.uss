@@ -1,0 +1,22 @@
+:root {
+}
+
+.panel {
+}
+
+.menu {
+}
+
+.unity-button {
+    background-color: rgb(250, 130, 0);
+    -unity-background-image-tint-color: rgb(0, 166, 255);
+    text-shadow: 0 0 0 rgb(241, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-left-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    transition-property: opacity;
+    transition-duration: 1s;
+    transition-timing-function: ease-out;
+    transition-delay: 1s;
+}
