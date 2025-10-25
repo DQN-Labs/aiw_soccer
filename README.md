@@ -10,7 +10,7 @@ The current crew: \
 Lead Dev & Manager: Din lokala programmerare 🇸🇪\
 Lead AI Dev: DQN Labs 🇮🇳\
 Assistant AI & Lead 3D Dev: Lyxn 🇪🇬\
-Public Contributor: Apache 🇻🇪
+AI Warehouse Contributor: Apache 🇻🇪
 
 
 Game started development: June 12, 2025\
