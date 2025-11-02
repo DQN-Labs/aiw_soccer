@@ -3592,10 +3592,10 @@ MonoBehaviour:
         z: 3.2907743
       Rotation:
         value:
-          x: -0.16447309
+          x: -0.16447312
           y: -0.61558163
           z: -0.2427301
-          w: 0.7314984
+          w: 0.7314985
     m_MetaData:
     - Mode: 2
       Tension: 0.5
@@ -7835,7 +7835,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2108845495}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.20566733, y: 0.40616018, z: -0.09435198, w: 0.8853432}
+  m_LocalRotation: {x: 0.20566726, y: 0.40616015, z: -0.09435192, w: 0.88534325}
   m_LocalPosition: {x: -29.08, y: 20.73, z: -54.81}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
