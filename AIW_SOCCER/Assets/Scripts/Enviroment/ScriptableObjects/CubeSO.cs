@@ -1,4 +1,4 @@
-using Unity.Sentis;
+
 using UnityEngine;
 
 public enum CubeType
@@ -11,6 +11,6 @@ public enum CubeType
 public class CubeSO : ScriptableObject
 {
     public GameObject cubePrefab; // Prefab for the cube
-    public ModelAsset brain;
+    public Unity.InferenceEngine.ModelAsset brain;
     public CubeType cubeType;
 }

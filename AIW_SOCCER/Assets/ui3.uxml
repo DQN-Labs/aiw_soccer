@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/ui_new_improved_3.uss?fileID=7433441132597879392&amp;guid=5b1e84856ff704fd99e3917c5ce337bc&amp;type=3#ui_new_improved_3" />
+    <ui:VisualElement name="panel" class="panel" style="flex-grow: 1;">
+        <ui:VisualElement name="primaryContainer" class="menu" style="flex-grow: 1; -unity-text-align: upper-center; align-items: flex-start; justify-content: flex-start; align-content: flex-start; align-self: auto;">
+            <ui:Button text="Button" name="Button" style="font-size: 100px; align-items: stretch; justify-content: flex-start; align-self: flex-end; align-content: flex-end; transform-origin: center; translate: -50px 888px; -unity-font-definition: resource(&apos;FlatSkin/Font/Roboto-Bold&apos;); -unity-text-align: upper-center; opacity: 1;" />
+            <ui:Button text="Button" name="Button" style="font-size: 100px; align-items: stretch; justify-content: flex-start; align-self: flex-end; align-content: flex-end; transform-origin: center; translate: -450px 732px; -unity-text-outline-color: rgb(0, 0, 0); -unity-font-definition: resource(&apos;FlatSkin/Font/Roboto-Bold&apos;); -unity-text-align: upper-center;" />
+            <ui:Button text="Button" name="Button" style="font-size: 100px; align-items: stretch; justify-content: flex-start; align-self: flex-end; align-content: flex-end; transform-origin: center; translate: -850px 575px; -unity-font-definition: resource(&apos;FlatSkin/Font/Roboto-Bold&apos;); -unity-text-align: upper-center;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
