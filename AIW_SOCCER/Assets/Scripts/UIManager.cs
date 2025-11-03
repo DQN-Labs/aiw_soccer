@@ -11,6 +11,9 @@ public class UIManager : MonoBehaviour
     public const string SkinSelection = "SkinSelection";
     public const string Settings = "Settings";
     public const string GameModeSelection = "GameModeSelection";
+
+    public GameObject mainMenuPanel;
+    public GameObject skinSelectionPanel;
     public void StartGame()
     {
         SceneManager.LoadScene(FieldScene);
@@ -27,8 +30,16 @@ public class UIManager : MonoBehaviour
     }
     public void GoSkinSelection()
     {
-        SceneManager.LoadScene(SkinSelection);
+        mainMenuPanel.SetActive(false);
+        skinSelectionPanel.SetActive(true);
     }
+
+    public void BackToMenuFromSkinSelection()
+    {
+        skinSelectionPanel.SetActive(false);
+        mainMenuPanel.SetActive(true);
+    }
+    
     public void GoSettings()
     {
         SceneManager.LoadScene(Settings);
@@ -57,3 +68,4 @@ public class UIManager : MonoBehaviour
         Debug.Log("PlayerPrefs cleared.");
     }
 }
+
