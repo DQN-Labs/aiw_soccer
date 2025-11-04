@@ -2537,13 +2537,13 @@ MonoBehaviour:
       - m_Target: {fileID: 1409430402}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SelectSkin
-        m_Mode: 3
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Kai
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &606283702
@@ -5598,13 +5598,13 @@ MonoBehaviour:
       - m_Target: {fileID: 1409430402}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SelectSkin
-        m_Mode: 3
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 4
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Tyler
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1054583931
@@ -6374,13 +6374,13 @@ MonoBehaviour:
       - m_Target: {fileID: 1409430402}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SelectSkin
-        m_Mode: 3
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 3
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Wai
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1202071601
@@ -7215,6 +7215,7 @@ GameObject:
   - component: {fileID: 1409430404}
   - component: {fileID: 1409430405}
   - component: {fileID: 1409430406}
+  - component: {fileID: 1409430407}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -7290,6 +7291,19 @@ MonoBehaviour:
   kaiText: {fileID: 900533571}
   albertText: {fileID: 489476951}
   percentageText: {fileID: 1201300827}
+--- !u!114 &1409430407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1409430401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41a3febe99965cd4ebf59a7d48ea96f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SelectButton
+  itemId: 
 --- !u!1 &1422391181
 GameObject:
   m_ObjectHideFlags: 0
@@ -7509,13 +7523,13 @@ MonoBehaviour:
       - m_Target: {fileID: 1409430402}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SelectSkin
-        m_Mode: 3
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Albert
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1422639185
@@ -8506,13 +8520,13 @@ MonoBehaviour:
       - m_Target: {fileID: 1409430402}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SelectSkin
-        m_Mode: 3
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 2
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Andrew
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1611743358
@@ -11255,7 +11269,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2108845495}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.20566726, y: 0.40616015, z: -0.09435192, w: 0.88534325}
+  m_LocalRotation: {x: 0.20566733, y: 0.40616018, z: -0.09435198, w: 0.8853432}
   m_LocalPosition: {x: -29.08, y: 20.73, z: -54.81}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

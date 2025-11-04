@@ -54,12 +54,19 @@ public class UIManager : MonoBehaviour
         GoalSaver.SaveScores();
     }
     // Skin Selection
-    public void SelectSkin(int skinIndex)
+    // public void SelectSkin(int skinIndex)
+    // {
+    //     PlayerPrefs.SetInt("SelectedSkin", skinIndex);
+    //     PlayerPrefs.Save();
+    //     Debug.Log("Skin " + skinIndex + " selected.");
+    //     FindObjectOfType<CardHandler>()?.UpdateCard();
+    // }
+    public void SelectSkin(string skinId)
     {
-        PlayerPrefs.SetInt("SelectedSkin", skinIndex);
+        PlayerPrefs.SetString("SelectedItem", skinId);
         PlayerPrefs.Save();
-        Debug.Log("Skin " + skinIndex + " selected.");
-        FindObjectOfType<CardHandler>()?.UpdateCard();
+        Debug.Log("Skin selected: " + skinId);
+        // removed the card thing for now
     }
     // here is some dev stuff we can expand later
     public void ClearPlayerPrefs()
