@@ -20,13 +20,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Small Room.unity
     guid: b585e8056a858be449a5add3f5453e78
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Train Scenes/FieldTrain2v2.unity
     guid: 3dc786e4a102240e59c4ad5a9acdee0d
   - enabled: 1
     path: Assets/Scenes/Settings.unity
     guid: 57ab626819e4b2d4e9ce1dca113aabfb
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Old or Unused/SkinSelection.unity
     guid: 8a014e1cfd2d45e419e98a08ac1db4e5
   - enabled: 1
